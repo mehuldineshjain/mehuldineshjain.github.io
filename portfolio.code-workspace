@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "files.eol": "\n",
+    "emmet.includeLanguages": {
+      "html": "html"
+    },
+    "livePreview.portNumber": 3000,
+    "css.validate": true,
+    "html.format.wrapLineLength": 120
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.live-server",
+      "ritwickdey.LiveServer",
+      "esbenp.prettier-vscode",
+      "formulahendry.auto-rename-tag",
+      "naumovs.color-highlight",
+      "christian-kohler.path-intellisense"
+    ]
+  }
+}

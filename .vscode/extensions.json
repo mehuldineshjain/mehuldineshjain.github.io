@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-vscode.live-server",
+    "ritwickdey.LiveServer",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "naumovs.color-highlight",
+    "christian-kohler.path-intellisense"
+  ]
+}
