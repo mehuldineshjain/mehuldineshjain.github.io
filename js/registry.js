@@ -111,7 +111,15 @@
         el("div", { class: "timeline-header" }, [
           el("div", {}, [
             el("h3", { class: "timeline-role", text: entry.role }),
-            el("p", { class: "timeline-org", text: entry.org }),
+            entry.link
+              ? el("a", {
+                  href: entry.link,
+                  class: "timeline-org",
+                  target: "_blank",
+                  rel: "noopener",
+                  text: entry.org,
+                })
+              : el("p", { class: "timeline-org", text: entry.org }),
           ]),
           el("span", { class: "timeline-date neu-inset", text: entry.date }),
         ]),
@@ -125,6 +133,45 @@
               "div",
               { class: "timeline-tags" },
               entry.tags.map((t) => el("span", { class: "mini-tag", text: t })),
+            )
+          : null,
+      ]),
+    ]);
+  }
+
+  // a project item (title-based, not timeline format)
+  function projectItem(project) {
+    return el("div", { class: "timeline-item visible" }, [
+      el("div", { class: "timeline-marker neu-raised" }, [
+        el("span", { class: "timeline-dot vol-dot" }),
+      ]),
+      el("div", { class: "timeline-content neu-raised" }, [
+        el("div", { class: "timeline-header" }, [
+          el("div", {}, [
+            project.link
+              ? el("a", {
+                  href: project.link,
+                  class: "timeline-role",
+                  target: "_blank",
+                  rel: "noopener",
+                  text: project.title,
+                })
+              : el("h3", { class: "timeline-role", text: project.title }),
+            el("p", { class: "timeline-org", text: project.desc }),
+          ]),
+        ]),
+        el(
+          "ul",
+          { class: "timeline-bullets" },
+          project.bullets.map((b) => el("li", { text: b })),
+        ),
+        project.tags && project.tags.length
+          ? el(
+              "div",
+              { class: "timeline-tags" },
+              project.tags.map((t) =>
+                el("span", { class: "mini-tag", text: t }),
+              ),
             )
           : null,
       ]),
@@ -239,7 +286,7 @@
         "div",
         { class: "awards-grid" },
         data.awards.map((a) =>
-          el("div", { class: "award-card neu-raised" }, [
+          el("div", { class: "award-card neu-raised visible" }, [
             el("div", { class: "award-icon neu-inset", text: a.icon }),
             el("div", { class: "award-body" }, [
               el("span", { class: "award-year", text: a.year }),
@@ -269,7 +316,7 @@
       el(
         "div",
         { class: "timeline" },
-        data.projects.map((e) => timelineItem(e, "vol-dot")),
+        data.projects.map((p) => projectItem(p)),
       ),
     ]);
   }

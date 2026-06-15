@@ -64,6 +64,7 @@
       {
         role: "Software Engineer II",
         org: "Arcadia (Urjanet)",
+        link: "https://www.arcadia.com/",
         date: "Apr 2023 – Mar 2024",
         location: "Remote",
         bullets: [
@@ -86,6 +87,7 @@
       {
         role: "Software Engineer I",
         org: "Aknamed Pvt. Ltd.",
+        link: "https://www.aknamed.com/",
         date: "Sep 2021 – Mar 2023",
         location: "Bengaluru, India",
         bullets: [
@@ -109,7 +111,8 @@
       },
       {
         role: "Software Engineer I",
-        org: "Cerner (Oracle Cerner)",
+        org: "Cerner (Oracle Health)",
+        link: "https://www.oracle.com/in/health/",
         date: "Aug 2020 – Sep 2021",
         location: "Bengaluru, India",
         bullets: [
@@ -120,7 +123,8 @@
       },
       {
         role: "Software Engineering Intern",
-        org: "Cerner (Oracle Cerner)",
+        org: "Cerner (Oracle Health)",
+        link: "https://www.oracle.com/in/health/",
         date: "Feb 2020 – Jul 2020",
         location: "Bengaluru, India",
         bullets: [
@@ -133,6 +137,17 @@
 
     // ── projects ────────────────────────────────────────────
     projects: [
+      {
+        title: "South Asian Women in Rare",
+        desc: "Website for South Asian Women in Rare Podcast.",
+        link: "",
+        tags: ["Healthcare", "Podcast", "Website Development"],
+        bullets: [
+          "Website for the podcast series for a non-profit.",
+          "Built with Astro and automated with YouTube Data API.",
+        ],
+      },
+
       {
         title: "Physiobuddy",
         desc: "A mobile-focused physiotherapy project that helps users perform physiotherapy remotely.",
