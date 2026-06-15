@@ -10,3 +10,7 @@ Thumbs.db
 # Misc
 node_modules/
 dist/
+LEARN.md
+README-private.md
+Prompt.md
+HANDOFF.md

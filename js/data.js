@@ -1,0 +1,289 @@
+/* ============================================================
+   PORTFOLIO — data.js
+   SINGLE SOURCE OF TRUTH for all copy.
+   No content lives in components/markup — everything is here.
+   Framework-agnostic plain object: reused as-is if/when this
+   project migrates to React (import the same module).
+   Exposed as window.PORTFOLIO_DATA for the no-build vanilla setup.
+   ============================================================ */
+(function (global) {
+  "use strict";
+
+  const data = {
+    // ── identity / hero ──────────────────────────────────────
+    profile: {
+      name: "Mehul Jain",
+      // roles[0] is the static fallback; the rest cycle in the typewriter
+      roles: [
+        "Software Engineer & Product Thinker",
+        "AI & Automation Expert",
+        "Mentor & Community Builder",
+        "Rare Disease Advocate",
+      ],
+      tagline:
+        "Building elegant systems at the intersection of technology and impact.",
+      avatar: "assets/images/profile_pic_2.png",
+      email: "mehuldj999@gmail.com",
+      links: [
+        {
+          label: "GitHub",
+          href: "https://github.com/mehulj999",
+          icon: "github",
+        },
+        {
+          label: "LinkedIn",
+          href: "https://linkedin.com/in/mehuldjain",
+          icon: "linkedin",
+        },
+        { label: "Email", href: "mailto:mehuldj999@gmail.com", icon: "mail" },
+      ],
+      bio: [
+        "Hi! I'm a full-stack engineer with a passion for crafting software that feels effortless to use. I've worked across startups and scale-ups, shipping products that serve thousands of users daily.",
+        "Outside of code, I mentor junior developers, volunteer for rare diseases and disability rights. I believe great software is equal parts craft and empathy.",
+      ],
+    },
+
+    // ── skills ───────────────────────────────────────────────
+    skills: [
+      "Python",
+      "Ruby",
+      "Javascript",
+      "React",
+      "TypeScript",
+      "PostgreSQL",
+      "REST & GraphQL APIs",
+      "AI-Assisted Automation",
+      "CRM Workflows",
+      "Dashboards",
+      "AWS",
+      "Docker",
+    ],
+
+    // ── experience ───────────────────────────────────────────
+    experience: [
+      {
+        role: "Software Engineer II",
+        org: "Arcadia (Urjanet)",
+        date: "Apr 2023 – Mar 2024",
+        location: "Remote",
+        bullets: [
+          "Managed the scraper bot move request feature, reducing account attrition and saving up to USD 250K.",
+          "Led integration of third-party reward programs with Optimus Rewards, increasing customer acquisition.",
+          "Implemented DocuSign integration and enhanced the waitlist experience program to streamline user workflows.",
+          "Consolidated APIs and created Postman documentation, improving team productivity by 30%.",
+          "Mentored two interns, both of whom successfully converted into full-time engineers.",
+          "Received three awards for best project delivery and outstanding performance.",
+        ],
+        tags: [
+          "Ruby on Rails",
+          "TypeScript",
+          "React",
+          "GraphQL",
+          "AWS",
+          "PostgreSQL",
+        ],
+      },
+      {
+        role: "Software Engineer I",
+        org: "Aknamed Pvt. Ltd.",
+        date: "Sep 2021 – Mar 2023",
+        location: "Bengaluru, India",
+        bullets: [
+          "Owned the Rate Contract Module and automated selling price logic for internal business workflows.",
+          "Reduced pricing errors by 99.9% and increased annual revenue by 1% through automation features.",
+          "Improved user experience with pricing indicators, alerts, and operational workflow enhancements.",
+          "Implemented a multi-tenant internal stock transfer system across branches and business units.",
+          "Enhanced operational efficiency by 30% with bulk upload functionality and automated report generation.",
+          "Optimized ElasticSearch performance across multiple modules, improving search speed by 20%.",
+          "Automated recurring tasks with Ruby and Python scripts for bulk invoice downloads, data corrections, and internal operations.",
+        ],
+        tags: [
+          "Ruby on Rails",
+          "JavaScript",
+          "jQuery",
+          "AWS",
+          "PostgreSQL",
+          "ElasticSearch",
+          "Bootstrap",
+        ],
+      },
+      {
+        role: "Software Engineer I",
+        org: "Cerner (Oracle Cerner)",
+        date: "Aug 2020 – Sep 2021",
+        location: "Bengaluru, India",
+        bullets: [
+          "Automated AWS CloudFormation command generation, improving developer efficiency by 15%.",
+          "Developed and maintained AWS EMR pipelines for population health algorithms using Clojure.",
+        ],
+        tags: ["Ruby on Rails", "Clojure", "AWS", "CloudFormation"],
+      },
+      {
+        role: "Software Engineering Intern",
+        org: "Cerner (Oracle Cerner)",
+        date: "Feb 2020 – Jul 2020",
+        location: "Bengaluru, India",
+        bullets: [
+          "Developed a React and Rails internal data fetching tool using the GitHub API.",
+          "Achieved 100% data consistency and reduced manual effort for internal engineering workflows.",
+        ],
+        tags: ["Ruby on Rails", "React", "GitHub API"],
+      },
+    ],
+
+    // ── projects ────────────────────────────────────────────
+    projects: [
+      {
+        title: "Physiobuddy",
+        desc: "A mobile-focused physiotherapy project that helps users perform physiotherapy remotely.",
+        link: "",
+        tags: ["Healthcare", "Remote Care", "Product Development"],
+        bullets: [
+          "Designed as a remote physiotherapy support tool for mobile users.",
+          "Focused on improving access to guided physiotherapy outside traditional clinical settings.",
+        ],
+      },
+      {
+        title: "Attrition Predictor",
+        desc: "An AI project built to identify the attrition probability of users, recognized with the Global Innovation Award at Arcadia Hackathon 2023.",
+        link: "",
+        tags: ["AI", "Predictive Analytics", "Hackathon"],
+        bullets: [
+          "Built a predictive solution to estimate user attrition probability.",
+          "Recognized with the Global Innovation Award during Arcadia Hackathon 2023.",
+        ],
+      },
+      {
+        title: "AInnualized Usage",
+        desc: "An AI project designed to predict annual usage estimates for users, recognized with a Technical Innovation Award at Arcadia Hackathon.",
+        link: "",
+        tags: ["AI", "Forecasting", "Automation"],
+        bullets: [
+          "Built an AI-driven solution to estimate annualized user usage.",
+          "Received a Technical Innovation Award for innovation and business relevance.",
+        ],
+      },
+      {
+        title: "Donor Management System",
+        desc: "A Django/Python contribution for the Haemophilia Federation of India focused on donor receipt fixes and system improvements.",
+        link: "",
+        tags: ["Django", "Python", "Nonprofit Tech"],
+        bullets: [
+          "Implemented donor receipt fixes for the Donor Management System.",
+          "Contributed to technology support for the Haemophilia Federation of India.",
+        ],
+      },
+    ],
+
+    // ── education ────────────────────────────────────────────
+    education: [
+      {
+        role: "Master of Science in Software Engineering",
+        org: "University of Europe for Applied Sciences",
+        date: "Sep 2024 – Sep 2025",
+        location: "Berlin, Germany",
+        bullets: [
+          "Graduate program focused on software engineering, modern development practices, and applied technology systems.",
+        ],
+        tags: ["Software Engineering", "Systems", "Product Development"],
+      },
+      {
+        role: "Master of Science in Information Technology",
+        org: "Jain University",
+        date: "Jul 2018 – Jul 2020",
+        location: "Bengaluru, India",
+        bullets: [
+          "Postgraduate study in information technology with a focus on software systems and applied computing.",
+        ],
+        tags: ["Information Technology", "Software Systems"],
+      },
+      {
+        role: "Bachelor of Computer Applications",
+        org: "St. Joseph's College",
+        date: "Jun 2015 – Jun 2018",
+        location: "Bengaluru, India",
+        bullets: [
+          "Undergraduate foundation in computer applications, programming, databases, and software development.",
+        ],
+        tags: ["Computer Applications", "Programming", "Databases"],
+      },
+    ],
+
+    // ── certifications ───────────────────────────────────────
+    certifications: [
+      {
+        title: "Meta Full Stack Developer: Front-End & Back-End from Scratch",
+        org: "Coursera by Meta",
+        year: "2025",
+        desc: "Covered HTML, CSS, JavaScript, React, Django, and API development.",
+        link: "https://coursera.org/verify/specialization/BAUKZHSQA8WR",
+        tags: ["React", "Django", "APIs", "Full Stack"],
+      },
+    ],
+
+    // ── awards ───────────────────────────────────────────────
+    awards: [
+      {
+        icon: "💡",
+        year: "2023",
+        title: "Technical Innovation Award",
+        org: "Arcadia Hackathon",
+        desc: "Recognized for the AI Annual Usage project, which predicted annual usage estimates for users.",
+      },
+      {
+        icon: "🌍",
+        year: "2023",
+        title: "Global Innovation Award",
+        org: "Arcadia Hackathon",
+        desc: "Recognized for the Attrition Predictor project, which identified user attrition probability.",
+      },
+      {
+        icon: "🦇",
+        year: "Dec 2023",
+        title: "Batman Award",
+        org: "Arcadia",
+        desc: "Received as best performer of the quarter for outstanding engineering performance.",
+      },
+      {
+        icon: "🩺",
+        year: "TBD",
+        title: "NHM Recognition",
+        org: "National Health Mission",
+        desc: "Recognized for digitalizing the Hemophilia Treatment Centers map for National Health Mission magazine.",
+      },
+    ],
+
+    // ── volunteering ─────────────────────────────────────────
+    volunteering: [
+      {
+        role: "Youth Leadership Program",
+        org: "Rare Disease International",
+        date: "May 2025",
+        location: "Geneva",
+        bullets: [
+          "Advocating for the rights of people with rare diseases and improved access to treatment around the world.",
+        ],
+      },
+      {
+        role: "Member",
+        org: "Interessengemeinschaft Hämophiler eV (IGH)",
+        date: "Oct 2024",
+        location: "Berlin",
+        bullets: [
+          "Represented hemophilia advocacy at the World Health Summit 2025.",
+        ],
+      },
+      {
+        role: "Youth Leader — South Zone Representative",
+        org: "Hemophilia Federation India",
+        date: "Feb 2020",
+        location: "India",
+        bullets: [
+          "Led camps focused on advocacy, training, awareness, and fundraising for the hemophilia community.",
+        ],
+      },
+    ],
+  };
+
+  global.PORTFOLIO_DATA = data;
+})(window);

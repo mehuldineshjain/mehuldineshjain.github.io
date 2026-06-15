@@ -1,90 +1,172 @@
 /* ============================================================
-   PORTFOLIO — main.js
-   Handles: scroll animations, active nav, hamburger, footer year
+   PORTFOLIO — main.js  (bootstrap)
+   Wires the framework-free pieces together:
+     theme  -> dark/light toggle
+     deck   -> 2D swipe engine (reads registry + data)
+     nav    -> sliding title (faint prev · bold current · faint next)
+     dots   -> one per section, built from the registry
+     keys   -> ←/→ sections, ↑/↓ cards, Home/End
+     extras -> hero typewriter, "Explore" CTA, swipe hint, year
+   No content here — everything comes from js/data.js.
    ============================================================ */
+(function () {
+  'use strict';
 
-// ── FOOTER YEAR ──────────────────────────────────────────────
-document.getElementById('year').textContent = new Date().getFullYear();
+  const data = window.PORTFOLIO_DATA;
+  const registry = window.PORTFOLIO_REGISTRY;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ── HAMBURGER MENU ────────────────────────────────────────────
-const hamburger   = document.getElementById('hamburger');
-const mobileMenu  = document.getElementById('mobileMenu');
-const mobLinks    = document.querySelectorAll('.mob-link');
+  // ── footer year ────────────────────────────────────────────
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-hamburger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
-  const isOpen = mobileMenu.classList.contains('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-  hamburger.querySelectorAll('span').forEach((s, i) => {
-    if (isOpen) {
-      if (i === 0) s.style.transform = 'rotate(45deg) translate(5px, 5px)';
-      if (i === 1) s.style.opacity   = '0';
-      if (i === 2) s.style.transform = 'rotate(-45deg) translate(5px, -5px)';
-    } else {
-      s.style.transform = '';
-      s.style.opacity   = '';
-    }
-  });
-});
+  // ── theme ──────────────────────────────────────────────────
+  if (window.PortfolioTheme) window.PortfolioTheme.init();
 
-// Close mobile menu on link click
-mobLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    hamburger.querySelectorAll('span').forEach(s => {
-      s.style.transform = '';
-      s.style.opacity   = '';
-    });
-  });
-});
+  // ── deck ───────────────────────────────────────────────────
+  const stage = document.getElementById('deckStage');
+  const deck = window.createDeck({ stage: stage, registry: registry, data: data });
 
-// ── INTERSECTION OBSERVER — scroll-in animations ──────────────
-const observeTargets = document.querySelectorAll(
-  '.timeline-item, .award-card, [data-animate]'
-);
+  // ── nav sliding title (prev · current · next) ──────────────
+  const ntPrev = document.getElementById('ntPrev');
+  const ntCur = document.getElementById('ntCur');
+  const ntNext = document.getElementById('ntNext');
+  const navTitle = document.getElementById('navTitle');
+  if (ntPrev) ntPrev.addEventListener('click', () => deck.prev());
+  if (ntNext) ntNext.addEventListener('click', () => deck.next());
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, idx) => {
-    if (entry.isIntersecting) {
-      // stagger children in the same batch
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, (idx % 6) * 80);
-      observer.unobserve(entry.target);
-    }
-  });
-}, {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
-});
-
-observeTargets.forEach(el => observer.observe(el));
-
-// ── ACTIVE NAV HIGHLIGHTING ───────────────────────────────────
-const sections  = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-link');
-
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(link => {
-        link.classList.toggle(
-          'active',
-          link.getAttribute('href') === `#${entry.target.id}`
-        );
-      });
-    }
-  });
-}, { threshold: 0.45 });
-
-sections.forEach(section => sectionObserver.observe(section));
-
-// ── NAV SCROLL SHADOW BOOST ───────────────────────────────────
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 20) {
-    nav.style.top = '12px';
-  } else {
-    nav.style.top = '20px';
+  function updateTitle(col) {
+    if (!navTitle) return;
+    ntPrev.textContent = col > 0 ? registry[col - 1].label : '';
+    ntCur.textContent = registry[col].label;
+    ntNext.textContent = col < registry.length - 1 ? registry[col + 1].label : '';
+    // retrigger the slide/fade animation
+    navTitle.classList.remove('animate');
+    void navTitle.offsetWidth; // force reflow
+    navTitle.classList.add('animate');
   }
-}, { passive: true });
+
+  // ── mobile menu links (built from registry; markup commented) ──
+  const mobMenuEl = document.getElementById('mobileMenuList');
+  if (mobMenuEl) {
+    registry.forEach((entry, i) => {
+      const a = document.createElement('a');
+      a.href = '#' + entry.id;
+      a.className = 'mob-link';
+      a.textContent = entry.label;
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        deck.goToSection(i);
+        const menu = document.getElementById('mobileMenu');
+        if (menu) menu.classList.remove('open');
+      });
+      mobMenuEl.appendChild(document.createElement('li')).appendChild(a);
+    });
+  }
+
+  // ── progress dots (one per section) ────────────────────────
+  const dotsEl = document.getElementById('deckDots');
+  const dots = [];
+  registry.forEach((entry, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'deck-dot';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Go to ' + entry.label);
+    dot.addEventListener('click', () => deck.goToSection(i));
+    dotsEl.appendChild(dot);
+    dots.push(dot);
+  });
+
+  // ── reflect active section in title + dots ─────────────────
+  function syncActive(col) {
+    updateTitle(col);
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === col);
+      d.setAttribute('aria-current', i === col ? 'true' : 'false');
+    });
+  }
+  deck.onChange((col) => { syncActive(col); dismissHint(); });
+  syncActive(deck.getSection());
+
+  // ── left / right side arrows (persistent hint + control) ──
+  const arrowLeft = document.getElementById('arrowLeft');
+  const arrowRight = document.getElementById('arrowRight');
+  if (arrowLeft) arrowLeft.addEventListener('click', () => deck.prev());
+  if (arrowRight) arrowRight.addEventListener('click', () => deck.next());
+
+  // ── keyboard ───────────────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+    switch (e.key) {
+      case 'ArrowRight': e.preventDefault(); deck.next(); break;
+      case 'ArrowLeft':  e.preventDefault(); deck.prev(); break;
+      // ↓/↑ scroll the detail card; jump cards only at the scroll edge
+      case 'ArrowDown':  e.preventDefault(); deck.nudge(1); break;
+      case 'ArrowUp':    e.preventDefault(); deck.nudge(-1); break;
+      case 'Home':       e.preventDefault(); deck.goToSection(0); break;
+      case 'End':        e.preventDefault(); deck.goToSection(deck.getSectionCount() - 1); break;
+    }
+  });
+
+  // ── "Explore My Work" CTA -> swipe down to the About card ──
+  stage.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-action="down"]');
+    if (trigger) { e.preventDefault(); deck.down(); }
+  });
+
+  // ── swipe hint: dismiss on first navigation ────────────────
+  let hintGone = false;
+  function dismissHint() {
+    if (hintGone) return;
+    hintGone = true;
+    const hint = document.getElementById('swipeHint');
+    if (hint) hint.classList.add('hidden');
+  }
+
+  // ── hero typewriter (kept by request) ──────────────────────
+  const roleEl = stage.querySelector('.deck-card[data-id="home"][data-row="0"] .hero-title');
+  if (roleEl && !reduce && data.profile.roles.length > 1) {
+    const roles = data.profile.roles;
+    let roleIdx = 0, charIdx = 0, deleting = false;
+    roleEl.innerHTML = '<span class="type-text"></span><span class="type-cursor">|</span>';
+    const textEl = roleEl.querySelector('.type-text');
+    const type = () => {
+      const word = roles[roleIdx];
+      charIdx += deleting ? -1 : 1;
+      textEl.textContent = word.slice(0, charIdx);
+      let delay = deleting ? 45 : 80;
+      if (!deleting && charIdx === word.length) { delay = 1800; deleting = true; }
+      else if (deleting && charIdx === 0) {
+        deleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        delay = 400;
+      }
+      setTimeout(type, delay);
+    };
+    setTimeout(type, 900);
+  }
+
+  // ── hamburger (EXPERIMENTAL — markup commented out in index.html) ──
+  // To re-enable: uncomment the hamburger button + #mobileMenu markup
+  // in index.html. Safe to delete this block if you drop the feature.
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      const isOpen = mobileMenu.classList.contains('open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.querySelectorAll('span').forEach((s, i) => {
+        if (isOpen) {
+          if (i === 0) s.style.transform = 'rotate(45deg) translate(5px, 5px)';
+          if (i === 1) s.style.opacity = '0';
+          if (i === 2) s.style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        } else {
+          s.style.transform = '';
+          s.style.opacity = '';
+        }
+      });
+    });
+  }
+})();

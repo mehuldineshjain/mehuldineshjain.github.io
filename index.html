@@ -1,414 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio — Your Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mehul Jain — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
-  <!-- NAV -->
+  <!-- NAV  — center sliding title (faint prev · bold current · faint next);
+       labels come from the card registry via main.js -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">YN<span class="dot">.</span></a>
-      <ul class="nav-links">
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#experience" class="nav-link">Experience</a></li>
-        <li><a href="#education" class="nav-link">Education</a></li>
-        <li><a href="#awards" class="nav-link">Awards</a></li>
-        <li><a href="#volunteering" class="nav-link">Volunteering</a></li>
-      </ul>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="#home" class="nav-logo">MJ<span class="dot">.</span></a>
+
+      <div class="nav-title" id="navTitle" aria-live="polite">
+        <button class="nt-prev" id="ntPrev" type="button" aria-label="Previous section"></button>
+        <span class="nt-cur" id="ntCur"></span>
+        <button class="nt-next" id="ntNext" type="button" aria-label="Next section"></button>
+      </div>
+
+      <div class="nav-actions">
+        <button class="theme-toggle neu-flat" id="themeToggle" type="button"
+          aria-label="Switch theme" aria-pressed="false">☾</button>
+
+        <!-- HAMBURGER — EXPERIMENTAL. Uncomment to test the mobile menu.
+             Paired JS lives in js/main.js (guarded, no-op while commented).
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        -->
+      </div>
     </div>
   </nav>
 
-  <!-- MOBILE MENU -->
+  <!-- MOBILE MENU — EXPERIMENTAL. Uncomment together with the hamburger above.
+       List items are injected from the registry into #mobileMenuList by main.js.
   <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="#about" class="mob-link">About</a></li>
-      <li><a href="#experience" class="mob-link">Experience</a></li>
-      <li><a href="#education" class="mob-link">Education</a></li>
-      <li><a href="#awards" class="mob-link">Awards</a></li>
-      <li><a href="#volunteering" class="mob-link">Volunteering</a></li>
-    </ul>
+    <ul id="mobileMenuList"></ul>
   </div>
+  -->
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-card neu-raised">
-      <div class="hero-avatar neu-inset">
-        <span class="avatar-initials">YN</span>
-      </div>
-      <h1 class="hero-name">Your Name</h1>
-      <p class="hero-title">Software Engineer &amp; Product Thinker</p>
-      <p class="hero-tagline">Building elegant systems at the intersection of technology and impact.</p>
-      <div class="hero-chips">
-        <span class="chip neu-flat">📍 Bengaluru, India</span>
-        <span class="chip neu-flat">💼 Open to Opportunities</span>
-      </div>
-      <div class="hero-ctas">
-        <a href="#about" class="btn-primary neu-raised">Explore My Work</a>
-        <a href="mailto:you@email.com" class="btn-ghost neu-flat">Get in Touch</a>
-      </div>
+  <!-- DECK STAGE — one card per registry entry, injected by deck.js -->
+  <main class="deck" id="deck">
+    <div class="deck-stage" id="deckStage"></div>
+
+    <!-- left / right affordances: persistent swipe hint + click control -->
+    <button class="deck-arrow deck-arrow--left" id="arrowLeft" type="button" aria-label="Previous section">‹</button>
+    <button class="deck-arrow deck-arrow--right" id="arrowRight" type="button" aria-label="Next section">›</button>
+
+    <!-- progress dots (injected from registry) -->
+    <div class="deck-dots" id="deckDots" aria-hidden="true"></div>
+
+    <!-- subtle swipe / keyboard hint -->
+    <div class="swipe-hint" id="swipeHint" aria-hidden="true">
+      <span class="hint-arrow">‹</span>
+      <span class="hint-text">
+        <span class="hint-touch">Swipe ↔, ↕ for detail</span><span class="hint-keys">← → sections · ↑ ↓ detail</span>
+      </span>
+      <span class="hint-arrow">›</span>
     </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="section" id="about">
-    <div class="container">
-      <h2 class="section-title">About <span class="accent">Me</span></h2>
-      <div class="about-grid">
-        <div class="about-bio neu-raised">
-          <p>Hi! I'm a full-stack engineer with a passion for crafting software that feels effortless to use. I've worked across startups and scale-ups, shipping products that serve thousands of users daily.</p>
-          <p>Outside of code, I mentor junior developers, contribute to open-source, and occasionally write about engineering culture. I believe great software is equal parts craft and empathy.</p>
-          <div class="about-links">
-            <a href="https://github.com" target="_blank" class="icon-link neu-raised" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-            </a>
-            <a href="https://linkedin.com" target="_blank" class="icon-link neu-raised" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a href="mailto:you@email.com" class="icon-link neu-raised" aria-label="Email">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="skills-panel">
-          <div class="skills-card neu-raised">
-            <h3 class="skills-heading">Core Skills</h3>
-            <div class="skill-tags">
-              <span class="skill-tag neu-inset">Python</span>
-              <span class="skill-tag neu-inset">TypeScript</span>
-              <span class="skill-tag neu-inset">React</span>
-              <span class="skill-tag neu-inset">Node.js</span>
-              <span class="skill-tag neu-inset">PostgreSQL</span>
-              <span class="skill-tag neu-inset">AWS</span>
-              <span class="skill-tag neu-inset">Docker</span>
-              <span class="skill-tag neu-inset">System Design</span>
-              <span class="skill-tag neu-inset">GraphQL</span>
-              <span class="skill-tag neu-inset">Kubernetes</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="section section-alt" id="experience">
-    <div class="container">
-      <h2 class="section-title">Work <span class="accent">Experience</span></h2>
-      <div class="timeline">
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Senior Software Engineer</h3>
-                <p class="timeline-org">Acme Technologies</p>
-              </div>
-              <span class="timeline-date neu-inset">2022 – Present</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Led a team of 5 engineers to re-architect the core payments service, reducing latency by 40%.</li>
-              <li>Designed and shipped a real-time analytics dashboard serving 50K+ daily active users.</li>
-              <li>Drove adoption of TypeScript across the frontend codebase, cutting production bugs by 30%.</li>
-            </ul>
-            <div class="timeline-tags">
-              <span class="mini-tag">React</span>
-              <span class="mini-tag">Node.js</span>
-              <span class="mini-tag">AWS</span>
-              <span class="mini-tag">PostgreSQL</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Software Engineer</h3>
-                <p class="timeline-org">Bright Labs</p>
-              </div>
-              <span class="timeline-date neu-inset">2019 – 2022</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Built and maintained microservices for a B2B SaaS product with 200+ enterprise clients.</li>
-              <li>Implemented CI/CD pipelines using GitHub Actions, cutting release cycles from weekly to daily.</li>
-              <li>Mentored two junior engineers who were promoted within 18 months.</li>
-            </ul>
-            <div class="timeline-tags">
-              <span class="mini-tag">Python</span>
-              <span class="mini-tag">Docker</span>
-              <span class="mini-tag">Kubernetes</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Software Engineering Intern</h3>
-                <p class="timeline-org">StartupXYZ</p>
-              </div>
-              <span class="timeline-date neu-inset">Summer 2018</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Developed a recommendation engine prototype using collaborative filtering, increasing user engagement by 15%.</li>
-              <li>Contributed to the public API documentation and wrote integration test suites.</li>
-            </ul>
-            <div class="timeline-tags">
-              <span class="mini-tag">Python</span>
-              <span class="mini-tag">Flask</span>
-              <span class="mini-tag">Redis</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- EDUCATION -->
-  <section class="section" id="education">
-    <div class="container">
-      <h2 class="section-title">Education</h2>
-      <div class="timeline">
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot edu-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">B.Tech in Computer Science &amp; Engineering</h3>
-                <p class="timeline-org">Indian Institute of Technology, Bombay</p>
-              </div>
-              <span class="timeline-date neu-inset">2015 – 2019</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>GPA: 8.9 / 10 — graduated with Honours.</li>
-              <li>Relevant coursework: Algorithms, Distributed Systems, Machine Learning, Database Systems.</li>
-              <li>Technical Secretary of the Computer Science Society — organized annual hackathon of 400+ participants.</li>
-            </ul>
-            <div class="timeline-tags">
-              <span class="mini-tag">Algorithms</span>
-              <span class="mini-tag">Distributed Systems</span>
-              <span class="mini-tag">ML</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot edu-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Higher Secondary Certificate (Science)</h3>
-                <p class="timeline-org">Delhi Public School, New Delhi</p>
-              </div>
-              <span class="timeline-date neu-inset">2013 – 2015</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>CBSE Board — 97.4% aggregate, school topper in Mathematics and Computer Science.</li>
-              <li>Represented school at the National Science Olympiad, finishing in the top 50 nationally.</li>
-            </ul>
-            <div class="timeline-tags">
-              <span class="mini-tag">Mathematics</span>
-              <span class="mini-tag">Physics</span>
-              <span class="mini-tag">Computer Science</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- AWARDS -->
-  <section class="section section-alt" id="awards">
-    <div class="container">
-      <h2 class="section-title">Awards &amp; <span class="accent">Recognition</span></h2>
-      <div class="awards-grid">
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">🏆</div>
-          <div class="award-body">
-            <span class="award-year">2023</span>
-            <h3 class="award-title">Engineer of the Year</h3>
-            <p class="award-org">Acme Technologies</p>
-            <p class="award-desc">Recognised for leading the payments re-architecture that saved $1.2M annually in infrastructure costs.</p>
-          </div>
-        </div>
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">🥇</div>
-          <div class="award-body">
-            <span class="award-year">2022</span>
-            <h3 class="award-title">Hackathon Winner — HackIndia</h3>
-            <p class="award-org">National Finalist</p>
-            <p class="award-desc">First place among 300 teams for an AI-powered supply chain optimisation tool built in 36 hours.</p>
-          </div>
-        </div>
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">🎖️</div>
-          <div class="award-body">
-            <span class="award-year">2021</span>
-            <h3 class="award-title">Best Open-Source Contribution</h3>
-            <p class="award-org">GitHub Stars Program</p>
-            <p class="award-desc">Top contributor recognition for a widely-used Python CLI toolkit with 3,000+ GitHub stars.</p>
-          </div>
-        </div>
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">📚</div>
-          <div class="award-body">
-            <span class="award-year">2019</span>
-            <h3 class="award-title">Dean's Merit Award</h3>
-            <p class="award-org">IIT Bombay</p>
-            <p class="award-desc">Awarded to the top 5% of graduates for academic excellence and extracurricular contributions.</p>
-          </div>
-        </div>
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">🌟</div>
-          <div class="award-body">
-            <span class="award-year">2018</span>
-            <h3 class="award-title">Google Summer of Code</h3>
-            <p class="award-org">Google / Mozilla Foundation</p>
-            <p class="award-desc">Completed GSoC project contributing accessibility improvements to Firefox Developer Tools.</p>
-          </div>
-        </div>
-
-        <div class="award-card neu-raised" data-animate>
-          <div class="award-icon neu-inset">💡</div>
-          <div class="award-body">
-            <span class="award-year">2017</span>
-            <h3 class="award-title">Smart India Hackathon</h3>
-            <p class="award-org">Government of India</p>
-            <p class="award-desc">Second place at the national government hackathon for a rural healthcare data platform.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- VOLUNTEERING & LEADERSHIP -->
-  <section class="section" id="volunteering">
-    <div class="container">
-      <h2 class="section-title">Volunteering &amp; <span class="accent">Leadership</span></h2>
-      <div class="timeline">
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot vol-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Tech Mentor</h3>
-                <p class="timeline-org">GirlScript Foundation</p>
-              </div>
-              <span class="timeline-date neu-inset">2021 – Present</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Mentoring 12 women engineers through weekly 1:1 sessions on career navigation and technical growth.</li>
-              <li>Delivered workshops on system design and interview preparation to 200+ participants across India.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot vol-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Chapter Lead</h3>
-                <p class="timeline-org">Google Developer Groups, Bengaluru</p>
-              </div>
-              <span class="timeline-date neu-inset">2020 – 2023</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Organised 30+ tech events, meetups, and study jams for a community of 8,000+ developers.</li>
-              <li>Partnered with local universities to run free cloud computing workshops for students.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot vol-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">Open-Source Maintainer</h3>
-                <p class="timeline-org">Apache Software Foundation</p>
-              </div>
-              <span class="timeline-date neu-inset">2020 – Present</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Core maintainer for an Apache incubator project used in production by 40+ organisations globally.</li>
-              <li>Reviewed 150+ pull requests and guided first-time contributors through the contribution process.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="timeline-item" data-animate>
-          <div class="timeline-marker neu-raised">
-            <span class="timeline-dot vol-dot"></span>
-          </div>
-          <div class="timeline-content neu-raised">
-            <div class="timeline-header">
-              <div>
-                <h3 class="timeline-role">STEM Educator</h3>
-                <p class="timeline-org">Teach for India (Volunteer)</p>
-              </div>
-              <span class="timeline-date neu-inset">2019 – 2020</span>
-            </div>
-            <ul class="timeline-bullets">
-              <li>Taught introductory programming to 80 students in government schools across Pune and Nashik.</li>
-              <li>Designed a project-based curriculum that led to 15 students winning district-level science fairs.</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
+  </main>
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-inner neu-raised">
-      <p class="footer-copy">Crafted with care · <span id="year"></span></p>
-      <div class="footer-links">
-        <a href="#hero" class="footer-link">Back to top ↑</a>
-      </div>
-    </div>
+    <span class="footer-copy">Crafted with care · <span id="year"></span></span>
   </footer>
 
+  <!-- single source of truth -->
+  <script src="js/data.js"></script>
+  <!-- card registry: order + builders -->
+  <script src="js/registry.js"></script>
+  <!-- theme toggle -->
+  <script src="js/theme.js"></script>
+  <!-- 3D swipe engine -->
+  <script src="js/deck.js"></script>
+  <!-- bootstrap / wiring -->
   <script src="js/main.js"></script>
 </body>
+
 </html>

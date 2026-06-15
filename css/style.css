@@ -34,6 +34,21 @@
   --font-mono:  'DM Mono', monospace;
 }
 
+/* ── DARK THEME (toggled via [data-theme="dark"] on <html>) ── */
+[data-theme="dark"] {
+  --bg:        #22252b;
+  --bg-alt:    #1d2025;
+  --shadow-dk: #16181d;
+  --shadow-lt: #2e323a;
+  --text-1:    #e6e9f0;
+  --text-2:    #aab2c5;
+  --text-3:    #6b7689;
+  --accent:    #8b83ff;
+  --accent-2:  #a99dff;
+  --edu:       #4fd1c5;
+  --vol:       #f6ad55;
+}
+
 /* ── RESET ───────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -43,6 +58,10 @@ body {
   color: var(--text-1);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  /* deck is a fixed full-screen stage — lock page scroll */
+  height: 100vh;
+  overflow: hidden;
+  transition: background-color var(--transition), color var(--transition);
 }
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -52,6 +71,24 @@ ul { list-style: none; }
 .neu-raised { box-shadow: var(--neu-outer); background: var(--bg); }
 .neu-inset  { box-shadow: var(--neu-inner); background: var(--bg); }
 .neu-flat   { box-shadow: var(--neu-flat);  background: var(--bg); }
+
+/* press feedback — physical button depress on active */
+.neu-raised:active,
+.neu-flat:active { box-shadow: var(--neu-pressed); }
+
+/* ── SCROLL PROGRESS BAR ──────────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  z-index: 200;
+  will-change: transform;
+}
 
 /* ── NAV ─────────────────────────────────────────────────── */
 .nav {
@@ -181,20 +218,50 @@ ul { list-style: none; }
   gap: 20px;
 }
 
+/* hero entrance — card lifts in, children cascade */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-card {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-card.loaded { opacity: 1; transform: translateY(0) scale(1); }
+
+  .hero-card > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .hero-card.loaded > * { opacity: 1; transform: translateY(0); }
+  .hero-card.loaded > *:nth-child(1) { transition-delay: 0.15s; }
+  .hero-card.loaded > *:nth-child(2) { transition-delay: 0.25s; }
+  .hero-card.loaded > *:nth-child(3) { transition-delay: 0.35s; }
+  .hero-card.loaded > *:nth-child(4) { transition-delay: 0.45s; }
+  .hero-card.loaded > *:nth-child(5) { transition-delay: 0.55s; }
+  .hero-card.loaded > *:nth-child(6) { transition-delay: 0.65s; }
+}
+
 .hero-avatar {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-card.loaded .hero-avatar { animation: avatar-float 5s ease-in-out 1s infinite; }
+}
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
 
-.avatar-initials {
-  font-family: var(--font-mono);
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: var(--accent);
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .hero-name {
@@ -210,6 +277,18 @@ ul { list-style: none; }
   font-weight: 500;
   font-family: var(--font-mono);
   letter-spacing: 0.02em;
+  min-height: 1.6em;
+}
+
+.type-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 400;
+  animation: cursor-blink 1s steps(1) infinite;
+}
+@keyframes cursor-blink {
+  0%, 50%  { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .hero-tagline {
@@ -281,8 +360,29 @@ ul { list-style: none; }
   letter-spacing: -0.02em;
   color: var(--text-1);
   margin-bottom: 56px;
+  position: relative;
+  display: inline-block;
 }
 .section-title .accent { color: var(--accent); }
+
+/* accent underline slides in when the title enters view */
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -14px;
+  height: 3px;
+  width: 56px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section-title.visible::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .section-title::after { transform: scaleX(1); }
+}
 
 /* ── ABOUT ────────────────────────────────────────────────── */
 .about-grid {
@@ -350,6 +450,32 @@ ul { list-style: none; }
   font-weight: 500;
   color: var(--text-2);
   font-family: var(--font-mono);
+  transition: transform var(--transition), color var(--transition), box-shadow var(--transition);
+}
+.skill-tag:hover {
+  transform: translateY(-2px);
+  color: var(--accent);
+  box-shadow: var(--neu-pressed);
+}
+
+/* cascade tags in when the skills card scrolls into view */
+@media (prefers-reduced-motion: no-preference) {
+  .skills-card .skill-tag {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease, color var(--transition), box-shadow var(--transition);
+  }
+  .skills-card.visible .skill-tag { opacity: 1; transform: translateY(0); }
+  .skills-card.visible .skill-tag:nth-child(1)  { transition-delay: 0.05s; }
+  .skills-card.visible .skill-tag:nth-child(2)  { transition-delay: 0.10s; }
+  .skills-card.visible .skill-tag:nth-child(3)  { transition-delay: 0.15s; }
+  .skills-card.visible .skill-tag:nth-child(4)  { transition-delay: 0.20s; }
+  .skills-card.visible .skill-tag:nth-child(5)  { transition-delay: 0.25s; }
+  .skills-card.visible .skill-tag:nth-child(6)  { transition-delay: 0.30s; }
+  .skills-card.visible .skill-tag:nth-child(7)  { transition-delay: 0.35s; }
+  .skills-card.visible .skill-tag:nth-child(8)  { transition-delay: 0.40s; }
+  .skills-card.visible .skill-tag:nth-child(9)  { transition-delay: 0.45s; }
+  .skills-card.visible .skill-tag:nth-child(10) { transition-delay: 0.50s; }
 }
 
 /* ── TIMELINE ────────────────────────────────────────────── */
@@ -404,9 +530,29 @@ ul { list-style: none; }
   border-radius: 50%;
   background: var(--accent);
   box-shadow: 0 0 0 3px var(--bg), 0 0 10px rgba(108,99,255,0.4);
+  position: relative;
 }
 .timeline-dot.edu-dot { background: var(--edu); box-shadow: 0 0 0 3px var(--bg), 0 0 10px rgba(56,178,172,0.4); }
 .timeline-dot.vol-dot { background: var(--vol); box-shadow: 0 0 0 3px var(--bg), 0 0 10px rgba(237,137,54,0.4); }
+
+/* sonar ripple — emanates from each dot */
+@media (prefers-reduced-motion: no-preference) {
+  .timeline-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: dot-ripple 2.8s ease-out infinite;
+  }
+  .timeline-dot.edu-dot::after { background: var(--edu); }
+  .timeline-dot.vol-dot::after { background: var(--vol); }
+}
+@keyframes dot-ripple {
+  0%   { transform: scale(1); opacity: 0.5; }
+  70%  { transform: scale(3.2); opacity: 0; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
 
 .timeline-content {
   border-radius: var(--radius-lg);
@@ -597,7 +743,10 @@ ul { list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   [data-animate],
   .timeline-item,
-  .award-card {
+  .award-card,
+  .hero-card,
+  .hero-card > *,
+  .skills-card .skill-tag {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -652,4 +801,404 @@ ul { list-style: none; }
   .hero-ctas { flex-direction: column; }
   .btn-primary, .btn-ghost { width: 100%; text-align: center; }
   .hero-chips { flex-direction: column; align-items: center; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   SWIPEABLE CARD DECK
+   ════════════════════════════════════════════════════════════ */
+
+/* ── NAV actions (theme toggle + optional hamburger) ───────── */
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text-2);
+  background: var(--bg);
+  transition: color var(--transition), box-shadow var(--transition);
+}
+.theme-toggle:hover { color: var(--accent); box-shadow: var(--neu-inner); }
+
+/* ── NAV sliding title (faint prev · bold current · faint next) ── */
+.nav-inner { position: relative; }
+.nav-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  max-width: 70%;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none; /* re-enabled on the prev/next buttons */
+}
+.nt-prev, .nt-next {
+  border: none;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-3);
+  opacity: 0.55;
+  padding: 0;
+  transition: color var(--transition), opacity var(--transition);
+}
+.nt-prev:hover, .nt-next:hover { color: var(--accent); opacity: 1; }
+.nt-prev:empty, .nt-next:empty { visibility: hidden; }
+.nt-cur {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+/* slide/fade the title in on each section change */
+.nav-title.animate .nt-cur { animation: title-in 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+.nav-title.animate .nt-prev { animation: side-in-l 0.45s ease; }
+.nav-title.animate .nt-next { animation: side-in-r 0.45s ease; }
+@keyframes title-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes side-in-l {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 0.55; transform: translateX(0); }
+}
+@keyframes side-in-r {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 0.55; transform: translateX(0); }
+}
+
+/* ── DECK / STAGE ──────────────────────────────────────────── */
+.deck {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* clear the floating nav (top) and dots/hint (bottom) */
+  padding: 104px 20px 96px;
+}
+
+.deck-stage {
+  position: relative;
+  /* height is capped to the space left between nav and dots so the
+     card never slides under the nav bar (fixes the overlap) */
+  width: min(92vw, 640px);
+  height: min(640px, calc(100dvh - 210px));
+  perspective: 1600px;
+  transform-style: preserve-3d;
+  outline: none;
+  /* we own horizontal gestures; vertical is handled in JS so the
+     detail card can scroll while covers navigate */
+  touch-action: none;
+}
+
+/* ── CARD FRAME ────────────────────────────────────────────── */
+.deck-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  /* spring-ish snap; durations are vars so vertical moves can slow down.
+     JS removes this while dragging via .dragging */
+  transition: transform var(--card-dur, 0.55s) var(--card-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+              opacity var(--op-dur, 0.4s) ease;
+}
+.deck-card.dragging { transition: none; }
+
+/* vertical (cover <-> detail) moves: slower + softer easing than horizontal */
+.deck-stage.v-move {
+  --card-dur: 0.85s;
+  --op-dur: 0.6s;
+  --card-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* in-card vertical scroll region */
+.card-body { height: 100%; display: flex; flex-direction: column; }
+.card-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 44px 40px 52px;
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--shadow-dk) transparent;
+}
+.card-scroll::-webkit-scrollbar { width: 8px; }
+.card-scroll::-webkit-scrollbar-thumb {
+  background: var(--shadow-dk);
+  border-radius: 8px;
+}
+
+/* per-card heading */
+.card-title {
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin-bottom: 32px;
+}
+.card-title .accent { color: var(--accent); }
+
+/* "↓ more" cue — shown only when content overflows & not at bottom */
+.card-more-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%) translateY(6px);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+  background: var(--bg);
+  box-shadow: var(--neu-flat);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.deck-card.has-more .card-more-cue {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  animation: cue-bob 1.8s ease-in-out infinite;
+}
+@keyframes cue-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(4px); }
+}
+
+/* ── COVER cards (fixed, centered, never scroll) ───────────── */
+.is-cover { overflow: hidden; }
+.card-cover {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* extra bottom pad reserves the "↓" cue band so content (e.g. the
+     hero CTAs) never sits under the cue on short screens (iPhone SE) */
+  padding: 40px 38px 58px;
+}
+.cover-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+}
+.cover-title {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text-1);
+  line-height: 1.15;
+}
+.cover-title .accent { color: var(--accent); }
+.cover-count {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-2);
+  padding: 6px 18px;
+  border-radius: 999px;
+  box-shadow: var(--neu-inner);
+}
+.cover-hint {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-3);
+  margin-top: 6px;
+}
+
+/* HERO cover (restored landing card) */
+.hero-cover .cover-inner { gap: 18px; }
+.hero-cover .hero-avatar { width: clamp(120px, 22vh, 168px); height: clamp(120px, 22vh, 168px); }
+.hero-cover .hero-name { font-size: clamp(1.9rem, 5vw, 2.6rem); }
+.hero-cover .hero-title { min-height: 1.6em; }
+.hero-cover .hero-ctas { margin-top: 10px; }
+
+/* SKILLS cover (single fixed card) */
+.skills-cover .skill-tags { justify-content: center; margin-top: 8px; }
+
+/* ABOUT detail (scrollable card below the hero) */
+.about-bio-block p {
+  color: var(--text-2);
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.about-bio-block { margin-bottom: 22px; }
+.deck-card .about-links { justify-content: flex-start; }
+
+/* DETAIL cards keep the more-cue out of the scroll flow */
+.is-scroll .card-scroll { padding-bottom: 56px; }
+
+/* awards fit the fixed card width */
+.deck-card .awards-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+/* timeline rail tighter inside a card */
+.deck-card .timeline-item { margin-bottom: 22px; }
+
+/* ── PROGRESS DOTS ─────────────────────────────────────────── */
+.deck-dots {
+  position: fixed;
+  left: 50%;
+  bottom: 50px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 90;
+}
+.deck-dot {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--bg);
+  box-shadow: var(--neu-flat);
+  transition: all var(--transition);
+}
+.deck-dot:hover { box-shadow: var(--neu-inner); }
+.deck-dot.active {
+  width: 30px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: var(--neu-pressed);
+}
+
+/* ── SWIPE HINT ────────────────────────────────────────────── */
+.swipe-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 58px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  z-index: 85;
+  opacity: 0.9;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+.swipe-hint.hidden { opacity: 0; transform: translateX(-50%) translateY(8px); }
+.hint-arrow {
+  font-size: 1.3rem;
+  color: var(--accent);
+  animation: hint-nudge 1.8s ease-in-out infinite;
+}
+.hint-arrow:last-child { animation-delay: 0.9s; }
+@keyframes hint-nudge {
+  0%, 100% { opacity: 0.4; transform: translateX(0); }
+  50%      { opacity: 1; }
+}
+.hint-keys { display: none; } /* desktop-only, swapped in below */
+@media (hover: hover) and (pointer: fine) {
+  .hint-touch { display: none; }
+  .hint-keys { display: inline; }
+}
+
+/* ── LEFT / RIGHT ARROWS (persistent swipe hint + click control) ── */
+.deck-arrow {
+  position: fixed;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: var(--neu-outer);
+  color: var(--text-2);
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 88;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition), box-shadow var(--transition);
+}
+.deck-arrow:hover { color: var(--accent); }
+.deck-arrow:active { box-shadow: var(--neu-pressed); }
+/* sit just outside the 640px card on wide screens, hug the edge on small */
+.deck-arrow--left  { left:  max(12px, calc(50% - 372px)); }
+.deck-arrow--right { right: max(12px, calc(50% - 372px)); }
+/* subtle nudge to read as "swipe this way" */
+@media (prefers-reduced-motion: no-preference) {
+  .deck-arrow--left  { animation: arrow-nudge-l 2.4s ease-in-out infinite; }
+  .deck-arrow--right { animation: arrow-nudge-r 2.4s ease-in-out infinite; }
+}
+@keyframes arrow-nudge-l {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50%      { transform: translateY(-50%) translateX(-4px); }
+}
+@keyframes arrow-nudge-r {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50%      { transform: translateY(-50%) translateX(4px); }
+}
+
+/* ── FOOTER (slim, fixed bottom-right) ─────────────────────── */
+.footer {
+  position: fixed;
+  right: 18px;
+  bottom: 14px;
+  z-index: 80;
+  padding: 0;
+}
+.footer-copy {
+  font-size: 0.72rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  opacity: 0.7;
+}
+
+/* ── REDUCED MOTION — crossfade only, no 3D ────────────────── */
+.deck-stage.reduce-motion .deck-card {
+  transition: opacity 0.3s ease;
+}
+
+/* ── RESPONSIVE — near-fullscreen card on mobile ───────────── */
+@media (max-width: 640px) {
+  .deck { padding: 92px 12px 84px; }
+  .deck-stage { width: 94vw; height: min(640px, calc(100dvh - 184px)); }
+  .card-scroll { padding: 32px 24px 48px; }
+  .card-cover { padding: 28px 22px 52px; }
+  .swipe-hint { bottom: 66px; }
+  /* the sliding title prev/next labels crowd a small bar — keep current only */
+  .nav-title { max-width: 56%; gap: 10px; }
+  .nt-prev, .nt-next { display: none; }
+  /* on mobile, navigate via swipe + dots — hide the side arrows */
+  .deck-arrow { display: none; }
+}
+@media (max-width: 420px) {
+  .deck-stage { height: min(640px, calc(100dvh - 176px)); }
+}
+
+/* short viewports (e.g. iPhone SE) — tighten the hero so it fits
+   above the cue band without clipping */
+@media (max-height: 720px) {
+  .hero-cover .cover-inner { gap: 12px; }
+  .hero-cover .hero-avatar { width: clamp(92px, 17vh, 130px); height: clamp(92px, 17vh, 130px); }
+  .hero-cover .hero-tagline { font-size: 0.95rem; }
+  .hero-cover .hero-ctas { margin-top: 4px; }
 }
