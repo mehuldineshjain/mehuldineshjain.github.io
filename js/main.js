@@ -106,6 +106,8 @@
   document.addEventListener('keydown', (e) => {
     const tag = (e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea') return;
+    // carousel open -> its own keydown handler owns the keys (don't move the deck)
+    if (document.body.classList.contains('lightbox-open')) return;
     switch (e.key) {
       case 'ArrowRight': e.preventDefault(); deck.next(); break;
       case 'ArrowLeft':  e.preventDefault(); deck.prev(); break;
