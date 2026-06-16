@@ -27,7 +27,14 @@
             class: "avatar-img",
           }),
         ]),
-        el("h1", { class: "hero-name", text: p.name }),
+        // two-tone name: first word base colour, last word accent
+        // (mirrors the "Work Experience" heading split)
+        el("h1", { class: "hero-name" }, (function () {
+          const parts = p.name.trim().split(" ");
+          if (parts.length < 2) return [p.name];
+          const last = parts.pop();
+          return [parts.join(" ") + " ", el("span", { class: "accent", text: last })];
+        })()),
         // .hero-title gets the typewriter wired by main.js
         el("p", { class: "hero-title", text: p.roles[0] }),
         el("p", { class: "hero-tagline", text: p.tagline }),

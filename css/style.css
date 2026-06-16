@@ -250,6 +250,7 @@ ul { list-style: none; }
   letter-spacing: -0.03em;
   color: var(--text-1);
 }
+.hero-name .accent { color: var(--accent); }
 
 .hero-title {
   font-size: 1.05rem;
@@ -1024,7 +1025,12 @@ ul { list-style: none; }
   padding: 6px 18px;
   border-radius: 999px;
   box-shadow: var(--neu-inner);
+  cursor: pointer;
+  transition: color var(--transition), box-shadow var(--transition);
 }
+.cover-count:hover { color: var(--accent); }
+.cover-count:active { box-shadow: var(--neu-pressed); }
+.cover-count:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .cover-hint {
   font-family: var(--font-mono);
   font-size: 0.78rem;

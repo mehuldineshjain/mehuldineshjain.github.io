@@ -98,6 +98,10 @@
   if (arrowLeft) arrowLeft.addEventListener('click', () => deck.prev());
   if (arrowRight) arrowRight.addEventListener('click', () => deck.next());
 
+  // ── nav logo (MJ.) -> jump home ────────────────────────────
+  const navLogo = document.querySelector('.nav-logo');
+  if (navLogo) navLogo.addEventListener('click', (e) => { e.preventDefault(); deck.goToSection(0); });
+
   // ── keyboard ───────────────────────────────────────────────
   document.addEventListener('keydown', (e) => {
     const tag = (e.target.tagName || '').toLowerCase();
@@ -110,6 +114,16 @@
       case 'ArrowUp':    e.preventDefault(); deck.nudge(-1); break;
       case 'Home':       e.preventDefault(); deck.goToSection(0); break;
       case 'End':        e.preventDefault(); deck.goToSection(deck.getSectionCount() - 1); break;
+      // Enter/Space activates a focused clickable affordance (cover-count, CTA, badge)
+      case 'Enter':
+      case ' ': {
+        const a = document.activeElement;
+        if (a && a.matches && a.matches('[data-action],[data-goto],[data-carousel],[data-tab]')) {
+          e.preventDefault();
+          a.click();
+        }
+        break;
+      }
     }
   });
 

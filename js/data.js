@@ -297,8 +297,8 @@
     // ── volunteering ─────────────────────────────────────────
     volunteering: [
       {
-        role: "Youth Leadership Program",
-        org: "Rare Disease International",
+        role: "RDI Youth Leadership Program",
+        org: "Rare Diseases International",
         date: "May 2025",
         location: "Geneva",
         bullets: [
@@ -309,12 +309,12 @@
         images: [
           {
             src: "assets/images/image_3_geneva.jpg",
-            caption: "Rare Disease International — Geneva",
+            caption: "Rare Diseases International — Geneva",
           },
         ],
       },
       {
-        role: "Member",
+        role: "Youth Member",
         org: "Interessengemeinschaft Hämophiler eV (IGH)",
         date: "Oct 2024",
         location: "Berlin",
@@ -323,7 +323,7 @@
         ],
       },
       {
-        role: "Youth Leader — South Zone Representative",
+        role: "HFI Youth Leader — South Zone Representative",
         org: "Hemophilia Federation India",
         date: "Feb 2020",
         location: "India",
@@ -341,7 +341,7 @@
           },
           {
             src: "assets/images/volunteering/hemophilia/volunteering_3_hfi_suro.png",
-            caption: "HFI camp — SURO",
+            caption: "HFI camp — Delhi",
           },
           {
             src: "assets/images/volunteering/hemophilia/volunteering_4_hfi_calicut.png",

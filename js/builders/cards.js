@@ -52,7 +52,15 @@
               ]
             : [title],
         ),
-        el("p", { class: "cover-count", text: count + " " + noun }),
+        // clickable: drops to the detail card below (main.js [data-action="down"])
+        el("p", {
+          class: "cover-count",
+          text: count + " " + noun,
+          "data-action": "down",
+          role: "button",
+          tabindex: "0",
+          "aria-label": "View " + count + " " + noun + " in detail",
+        }),
       ],
       "cover-count",
     );
