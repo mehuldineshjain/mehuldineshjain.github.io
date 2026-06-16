@@ -15,7 +15,11 @@
   // `carouselKey` (optional): when the entry has media (`events` or `images`),
   // renders a photo badge that opens the carousel for that key.
   function timelineItem(entry, dotClass, carouselKey) {
-    const mediaCount = PB.mediaCount ? PB.mediaCount(entry) : (entry.images ? entry.images.length : 0);
+    const mediaCount = PB.mediaCount
+      ? PB.mediaCount(entry)
+      : entry.images
+        ? entry.images.length
+        : 0;
     const hasPhotos = carouselKey && mediaCount > 0;
     return el("div", { class: "timeline-item visible" }, [
       el("div", { class: "timeline-marker neu-raised" }, [
@@ -57,8 +61,7 @@
   // a project item (title-based, not timeline format).
   // `carouselKey` (optional): photo badge when the project has `images`.
   function projectItem(project, carouselKey) {
-    const hasPhotos =
-      carouselKey && project.images && project.images.length;
+    const hasPhotos = carouselKey && project.images && project.images.length;
     // live / in-progress / nda status dot (top-right of the card)
     const statusDot =
       project.status === "live" ||
@@ -81,10 +84,9 @@
           })
         : null;
 
-    // A neat, standard text-adjacent icon mapping to your solid/filled SVG design requirements
     const linkIcon = el("span", {
       class: "project-link-icon",
-      html: '<svg viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; width:1em; height:1em; margin-left:6px; vertical-align:middle;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>',
+      html: ICONS.externalLink,
     });
 
     return el(
@@ -143,6 +145,11 @@
 
   // a certification card (reuses the award-card styling)
   function certItem(c) {
+    const linkIcon = el("span", {
+      class: "cert-link-icon",
+      html: ICONS.externalLink,
+    });
+
     return el("div", { class: "award-card cert-card neu-raised visible" }, [
       el("div", {
         class: "award-icon neu-inset",
@@ -153,13 +160,16 @@
         el("span", { class: "award-year", text: c.year }),
         c.link
           ? el("h3", { class: "award-title" }, [
-              el("a", {
-                href: c.link,
-                class: "award-link",
-                target: "_blank",
-                rel: "noopener",
-                text: c.title,
-              }),
+              el(
+                "a",
+                {
+                  href: c.link,
+                  class: "award-link",
+                  target: "_blank",
+                  rel: "noopener",
+                },
+                [el("span", { text: c.title }), linkIcon],
+              ),
             ])
           : el("h3", { class: "award-title", text: c.title }),
         el("p", { class: "award-org", text: c.org }),
