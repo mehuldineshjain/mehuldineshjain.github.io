@@ -1372,6 +1372,9 @@ body.lightbox-open { overflow: hidden; }
 }
 .lightbox-prev { left: -22px; }
 .lightbox-next { right: -22px; }
+/* single-image carousel: JS sets .hidden, but display:flex above would
+   override the UA [hidden] rule — force it off here */
+.lightbox-nav[hidden] { display: none; }
 .lightbox-close:hover,
 .lightbox-nav:hover { color: var(--accent); }
 .lightbox-close:active,
