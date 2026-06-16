@@ -3,7 +3,7 @@
 > A personal portfolio where sections are a **2D swipeable card deck** instead of a long vertical scroll.
 > Built with plain HTML, CSS, and vanilla JavaScript — no build step, no framework, no dependencies.
 
-**[Live Demo →](https://mehulj999.github.io)**
+**[Live Demo →](https://mehuldineshjain.github.io)**
 
 ![Portfolio preview](assets/images/preview.png)
 <!-- Replace with a screenshot or screen-recording GIF of the card deck in action -->
@@ -134,4 +134,4 @@ See [LICENSE](LICENSE) for the full text.
 
 **Mehul Jain** — Software Engineer & Product Thinker
 
-[GitHub](https://github.com/mehulj999) · [LinkedIn](https://linkedin.com/in/mehuldjain) · [Email](mailto:mehuldj999@gmail.com)
+[GitHub](https://github.com/mehuldineshjain) · [LinkedIn](https://linkedin.com/in/mehuldjain) · [Email](mailto:mehuldj999@gmail.com)

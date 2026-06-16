@@ -79,13 +79,27 @@
 
         card.appendChild(cardDef.build(data));
 
-        // vertical down-cue (shown when a card sits below this one);
-        // label comes from the registry card's `cue` field
-        const cue = document.createElement('div');
-        cue.className = 'card-more-cue';
-        cue.setAttribute('aria-hidden', 'true');
-        cue.textContent = '↓ ' + (cardDef.cue || 'more');
-        card.appendChild(cue);
+        // vertical cues — clickable, navigate like the arrow keys.
+        // ↓ shown when a card sits below; ↑ shown when one sits above.
+        // labels come from the registry card's `cue` / `cueUp` fields.
+        if (row < section.cards.length - 1) {
+          const dn = document.createElement('button');
+          dn.type = 'button';
+          dn.className = 'card-cue card-cue--down';
+          dn.setAttribute('aria-label', 'Go to ' + (cardDef.cue || 'next card'));
+          dn.textContent = '↓ ' + (cardDef.cue || 'more');
+          dn.addEventListener('click', function (e) { e.preventDefault(); down(); });
+          card.appendChild(dn);
+        }
+        if (row > 0) {
+          const upBtn = document.createElement('button');
+          upBtn.type = 'button';
+          upBtn.className = 'card-cue card-cue--up';
+          upBtn.setAttribute('aria-label', 'Go to ' + (cardDef.cueUp || 'previous card'));
+          upBtn.textContent = '↑ ' + (cardDef.cueUp || 'back');
+          upBtn.addEventListener('click', function (e) { e.preventDefault(); up(); });
+          card.appendChild(upBtn);
+        }
 
         stage.appendChild(card);
         rows.push({ el: card, scrollable: !!cardDef.scrollable });
@@ -172,11 +186,12 @@
     }
 
     function updateCues() {
-      // show the "↓ more" cue only on the front card, only if a card sits below it
+      // show cues only on the front card: ↓ if a card sits below, ↑ if above
       grid.forEach((rows, col) =>
         rows.forEach((c, row) => {
-          const show = col === pos.col && row === pos.row && row < rowCount(col) - 1;
-          c.el.classList.toggle('has-more', show);
+          const isFront = col === pos.col && row === pos.row;
+          c.el.classList.toggle('has-more', isFront && row < rowCount(col) - 1);
+          c.el.classList.toggle('has-prev', isFront && row > 0);
         }));
     }
 

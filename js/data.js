@@ -25,9 +25,10 @@
       avatar: "assets/images/profile_pic_2.png",
       email: "mehuldj999@gmail.com",
       links: [
+        { label: "Résumé", href: "assets/resume/resume.pdf", icon: "resume" },
         {
           label: "GitHub",
-          href: "https://github.com/mehulj999",
+          href: "https://github.com/mehuldineshjain",
           icon: "github",
         },
         {
@@ -38,9 +39,10 @@
         { label: "Email", href: "mailto:mehuldj999@gmail.com", icon: "mail" },
       ],
       bio: [
-        "Hi! I'm a full-stack engineer with a passion for crafting software that feels effortless to use. I've worked across startups and scale-ups, shipping products that serve thousands of users daily.",
+        "I'm a full-stack engineer with a passion for crafting software that feels effortless to use. I've worked across startups and scale-ups, shipping products that serve thousands of users daily.",
         "Outside of code, I mentor junior developers, volunteer for rare diseases and disability rights. I believe great software is equal parts craft and empathy.",
       ],
+      // accessibility statement was here — moved into `skills` instead
     },
 
     // ── skills ───────────────────────────────────────────────
@@ -54,9 +56,9 @@
       "REST & GraphQL APIs",
       "AI-Assisted Automation",
       "CRM Workflows",
-      "Dashboards",
       "AWS",
       "Docker",
+      "Accessibility (WCAG Compliance)",
     ],
 
     // ── experience ───────────────────────────────────────────
@@ -122,7 +124,7 @@
         tags: ["Ruby on Rails", "Clojure", "AWS", "CloudFormation"],
       },
       {
-        role: "Software Engineering Intern",
+        role: "Software Engineer Intern",
         org: "Cerner (Oracle Health)",
         link: "https://www.oracle.com/in/health/",
         date: "Feb 2020 – Jul 2020",
@@ -140,7 +142,9 @@
       {
         title: "South Asian Women in Rare",
         desc: "Website for South Asian Women in Rare Podcast.",
-        link: "",
+        link: "https://south-asian-women-in-rare.netlify.app/",
+        // status: "live" -> green dot, "wip" -> yellow dot, omit -> no dot
+        status: "live",
         tags: ["Healthcare", "Podcast", "Website Development"],
         bullets: [
           "Website for the podcast series for a non-profit.",
@@ -149,9 +153,10 @@
       },
 
       {
-        title: "Physiobuddy",
+        title: "Physiobuddy (WIP)",
         desc: "A mobile-focused physiotherapy project that helps users perform physiotherapy remotely.",
         link: "",
+        status: "wip",
         tags: ["Healthcare", "Remote Care", "Product Development"],
         bullets: [
           "Designed as a remote physiotherapy support tool for mobile users.",
@@ -159,9 +164,10 @@
         ],
       },
       {
-        title: "Attrition Predictor",
-        desc: "An AI project built to identify the attrition probability of users, recognized with the Global Innovation Award at Arcadia Hackathon 2023.",
+        title: "Attrition Predictor (Hackathon)",
+        desc: "Predict attrition of users. (Global Innovation Award, Arcadia Hackathon 2023).",
         link: "",
+        status: "nda",
         tags: ["AI", "Predictive Analytics", "Hackathon"],
         bullets: [
           "Built a predictive solution to estimate user attrition probability.",
@@ -169,9 +175,10 @@
         ],
       },
       {
-        title: "AInnualized Usage",
-        desc: "An AI project designed to predict annual usage estimates for users, recognized with a Technical Innovation Award at Arcadia Hackathon.",
+        title: "AI Annualized Usage (Hackathon)",
+        desc: "Predict annual usage estimates. (Technical Innovation Award, Arcadia Hackathon 2023).",
         link: "",
+        status: "nda",
         tags: ["AI", "Forecasting", "Automation"],
         bullets: [
           "Built an AI-driven solution to estimate annualized user usage.",
@@ -179,13 +186,13 @@
         ],
       },
       {
-        title: "Donor Management System",
-        desc: "A Django/Python contribution for the Haemophilia Federation of India focused on donor receipt fixes and system improvements.",
+        title: "Donor Management System (NDA)",
+        desc: "Donor Management system to comply with FCRA, 80G compliance and automations.",
         link: "",
+        status: "nda",
         tags: ["Django", "Python", "Nonprofit Tech"],
         bullets: [
-          "Implemented donor receipt fixes for the Donor Management System.",
-          "Contributed to technology support for the Haemophilia Federation of India.",
+          "Implemented a donor management system for the Haemophilia Federation of India.",
         ],
       },
     ],
@@ -195,6 +202,7 @@
       {
         role: "Master of Science in Software Engineering",
         org: "University of Europe for Applied Sciences",
+        link: "https://www.ue-germany.com/",
         date: "Sep 2024 – Sep 2025",
         location: "Berlin, Germany",
         bullets: [
@@ -205,6 +213,7 @@
       {
         role: "Master of Science in Information Technology",
         org: "Jain University",
+        link: "https://www.jainuniversity.ac.in/",
         date: "Jul 2018 – Jul 2020",
         location: "Bengaluru, India",
         bullets: [
@@ -215,6 +224,7 @@
       {
         role: "Bachelor of Computer Applications",
         org: "St. Joseph's College",
+        link: "https://www.sjc.ac.in/",
         date: "Jun 2015 – Jun 2018",
         location: "Bengaluru, India",
         bullets: [
@@ -233,17 +243,30 @@
         desc: "Covered HTML, CSS, JavaScript, React, Django, and API development.",
         link: "https://coursera.org/verify/specialization/BAUKZHSQA8WR",
         tags: ["React", "Django", "APIs", "Full Stack"],
+        icon: "meta",
+      },
+      {
+        title: "Claude Code 101",
+        org: "Anthropic Academy",
+        year: "2026",
+        desc: "AI-assisted workflows,agentic loop, context window, tools, and permissions.",
+        link: "https://verify.skilljar.com/c/itty2fhtrxq7",
+        tags: ["Claude", "AI", "Agents", "Workflow"],
+        icon: "claude",
       },
     ],
 
     // ── awards ───────────────────────────────────────────────
     awards: [
+      // add a `link` to any award to make its title clickable (e.g. a
+      // certificate, article, or proof URL). Empty/omitted -> plain text.
       {
         icon: "💡",
         year: "2023",
         title: "Technical Innovation Award",
         org: "Arcadia Hackathon",
         desc: "Recognized for the AI Annual Usage project, which predicted annual usage estimates for users.",
+        link: "",
       },
       {
         icon: "🌍",
@@ -251,6 +274,7 @@
         title: "Global Innovation Award",
         org: "Arcadia Hackathon",
         desc: "Recognized for the Attrition Predictor project, which identified user attrition probability.",
+        link: "",
       },
       {
         icon: "🦇",
@@ -258,6 +282,7 @@
         title: "Batman Award",
         org: "Arcadia",
         desc: "Received as best performer of the quarter for outstanding engineering performance.",
+        link: "",
       },
       {
         icon: "🩺",
@@ -265,6 +290,7 @@
         title: "NHM Recognition",
         org: "National Health Mission",
         desc: "Recognized for digitalizing the Hemophilia Treatment Centers map for National Health Mission magazine.",
+        link: "",
       },
     ],
 
@@ -296,6 +322,33 @@
         bullets: [
           "Led camps focused on advocacy, training, awareness, and fundraising for the hemophilia community.",
         ],
+      },
+    ],
+
+    // ── gallery ──────────────────────────────────────────────
+    // Scaffold: drop real images into assets/images/gallery/ and set `img`.
+    // While `img` is empty a placeholder tile shows. `section` (optional) is
+    // a section id the tile links to (click jumps the deck there).
+    gallery: [
+      {
+        img: "",
+        caption: "Rare Disease International — Geneva",
+        section: "volunteering",
+      },
+      {
+        img: "",
+        caption: "World Health Summit 2025 — Berlin",
+        section: "volunteering",
+      },
+      {
+        img: "",
+        caption: "Arcadia Hackathon awards",
+        section: "awards",
+      },
+      {
+        img: "",
+        caption: "Hemophilia Federation India camps",
+        section: "volunteering",
       },
     ],
   };

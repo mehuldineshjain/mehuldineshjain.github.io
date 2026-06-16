@@ -914,17 +914,17 @@ ul { list-style: none; }
   transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform, opacity;
-  /* spring-ish snap; durations are vars so vertical moves can slow down.
-     JS removes this while dragging via .dragging */
-  transition: transform var(--card-dur, 0.55s) var(--card-ease, cubic-bezier(0.16, 1, 0.3, 1)),
-              opacity var(--op-dur, 0.4s) ease;
+  /* one consistent speed for both axes: 10% slower than the previous
+     slowest (0.85s) -> 0.94s. JS removes this while dragging via .dragging */
+  transition: transform var(--card-dur, 0.94s) var(--card-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+              opacity var(--op-dur, 0.66s) ease;
 }
 .deck-card.dragging { transition: none; }
 
-/* vertical (cover <-> detail) moves: slower + softer easing than horizontal */
+/* vertical (cover <-> detail) moves use the SAME timing as horizontal now */
 .deck-stage.v-move {
-  --card-dur: 0.85s;
-  --op-dur: 0.6s;
+  --card-dur: 0.94s;
+  --op-dur: 0.66s;
   --card-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -955,13 +955,15 @@ ul { list-style: none; }
 }
 .card-title .accent { color: var(--accent); }
 
-/* "↓ more" cue — shown only when content overflows & not at bottom */
-.card-more-cue {
+/* ↓ / ↑ cues — clickable pills that navigate between stacked cards.
+   Shown only on the front card (toggled via .has-more / .has-prev). */
+.card-cue {
   position: absolute;
   left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%) translateY(6px);
-  padding: 4px 14px;
+  z-index: 30;
+  border: none;
+  cursor: pointer;
+  padding: 5px 15px;
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -970,16 +972,41 @@ ul { list-style: none; }
   box-shadow: var(--neu-flat);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease, color var(--transition);
 }
-.deck-card.has-more .card-more-cue {
+.card-cue:hover { color: var(--accent); }
+.card-cue:active { box-shadow: var(--neu-pressed); }
+.card-cue:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.card-cue--down { bottom: 14px; transform: translateX(-50%) translateY(6px); }
+.card-cue--up   { top: 14px;    transform: translateX(-50%) translateY(-6px); }
+
+.deck-card.has-more .card-cue--down {
   opacity: 1;
+  pointer-events: auto;
   transform: translateX(-50%) translateY(0);
-  animation: cue-bob 1.8s ease-in-out infinite;
+  animation: cue-bob-down 1.8s ease-in-out infinite;
 }
-@keyframes cue-bob {
+.deck-card.has-prev .card-cue--up {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+  animation: cue-bob-up 1.8s ease-in-out infinite;
+}
+@keyframes cue-bob-down {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50%      { transform: translateX(-50%) translateY(4px); }
+}
+@keyframes cue-bob-up {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-card.has-more .card-cue--down,
+  .deck-card.has-prev .card-cue--up { animation: none; }
 }
 
 /* ── COVER cards (fixed, centered, never scroll) ───────────── */
@@ -1044,8 +1071,8 @@ ul { list-style: none; }
 .about-bio-block { margin-bottom: 22px; }
 .deck-card .about-links { justify-content: flex-start; }
 
-/* DETAIL cards keep the more-cue out of the scroll flow */
-.is-scroll .card-scroll { padding-bottom: 56px; }
+/* DETAIL cards keep the ↓/↑ cues out of the scroll flow */
+.is-scroll .card-scroll { padding-top: 56px; padding-bottom: 56px; }
 
 /* awards fit the fixed card width */
 .deck-card .awards-grid {
@@ -1054,6 +1081,177 @@ ul { list-style: none; }
 }
 /* timeline rail tighter inside a card */
 .deck-card .timeline-item { margin-bottom: 22px; }
+
+/* ── PROJECT STATUS DOT (live / in-progress) ───────────────── */
+.timeline-content.has-status { position: relative; }
+.project-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--bg);
+}
+.project-status--live { background: #22c55e; }
+.project-status--wip  { background: #eab308; }
+.project-status--nda {background: #847ffc}
+.project-status::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.project-status--live::after { background: #22c55e; }
+.project-status--wip::after  { background: #eab308; }
+.project-status--nda::after {
+  background: #847ffc
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-status::after { animation: status-pulse 2.2s ease-out infinite; }
+}
+@keyframes status-pulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(2.6); opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* ── ACCESSIBILITY callout (About card) ────────────────────── */
+.about-a11y {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 22px;
+}
+.a11y-icon { font-size: 1.4rem; line-height: 1.2; flex-shrink: 0; }
+.a11y-text {
+  font-size: 0.9rem;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── RESUME POINTER (hero top-right) ───────────────────────────
+   REVERT: delete this whole block + the heroCover append in
+   js/registry.js. PDF lives at assets/resume.pdf. */
+.hero-resume {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-2);
+  transition: color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.hero-resume:hover { color: var(--accent); transform: translateY(-2px); }
+.hero-resume:active { box-shadow: var(--neu-pressed); }
+.hero-resume:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hero-resume-doc { font-size: 0.95rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-resume { animation: resume-pulse 2.6s ease-in-out infinite; }
+}
+@keyframes resume-pulse {
+  0%, 100% { box-shadow: var(--neu-flat); }
+  50%      { box-shadow: var(--neu-outer); }
+}
+@media (max-width: 420px) {
+  .hero-resume-label { display: none; }
+  .hero-resume { padding: 8px; }
+}
+
+/* ── GALLERY ───────────────────────────────────────────────── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.gallery-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.gallery-item:hover { transform: translateY(-3px); }
+.gallery-item:active { box-shadow: var(--neu-pressed); }
+.gallery-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gallery-figure { margin: 0; }
+.gallery-img,
+.gallery-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  box-shadow: var(--neu-inner);
+}
+.gallery-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--text-3);
+  background: var(--bg-alt);
+}
+.gallery-caption {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  line-height: 1.4;
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SKIP LINK (keyboard a11y) ─────────────────────────────── */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translate(-50%, -160%);
+  z-index: 300;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow: var(--neu-outer);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus { transform: translate(-50%, 0); outline: 2px solid var(--accent); }
+
+/* award / cert clickable titles */
+.award-link { color: inherit; transition: color var(--transition); }
+.award-link:hover { color: var(--accent); text-decoration: underline; }
+
+/* ── KEYBOARD FOCUS RINGS (a11y) ───────────────────────────── */
+.deck-stage:focus-visible,
+.deck-dot:focus-visible,
+.deck-arrow:focus-visible,
+.nt-prev:focus-visible,
+.nt-next:focus-visible,
+.theme-toggle:focus-visible,
+.icon-link:focus-visible,
+.timeline-org:focus-visible,
+.btn-primary:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 
 /* ── PROGRESS DOTS ─────────────────────────────────────────── */
 .deck-dots {

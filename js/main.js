@@ -109,10 +109,18 @@
     }
   });
 
-  // ── "Explore My Work" CTA -> swipe down to the About card ──
+  // ── in-card actions: "Explore" CTA + gallery tile jumps ──
   stage.addEventListener('click', (e) => {
     const trigger = e.target.closest('[data-action="down"]');
-    if (trigger) { e.preventDefault(); deck.down(); }
+    if (trigger) { e.preventDefault(); deck.down(); return; }
+    // gallery tile -> jump to its linked section
+    const goto = e.target.closest('[data-goto]');
+    if (goto) {
+      e.preventDefault();
+      const id = goto.getAttribute('data-goto');
+      const idx = registry.findIndex((s) => s.id === id);
+      if (idx >= 0) deck.goToSection(idx);
+    }
   });
 
   // ── swipe hint: dismiss on first navigation ────────────────
