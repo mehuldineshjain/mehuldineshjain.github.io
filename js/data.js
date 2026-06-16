@@ -150,6 +150,12 @@
           "Website for the podcast series for a non-profit.",
           "Built with Astro and automated with YouTube Data API.",
         ],
+        images: [
+          {
+            src: "assets/images/projects/south-asian-women-in-rare.png",
+            caption: "South Asian Women in Rare — website",
+          },
+        ],
       },
 
       {
@@ -261,12 +267,32 @@
       // add a `link` to any award to make its title clickable (e.g. a
       // certificate, article, or proof URL). Empty/omitted -> plain text.
       {
+        icon: "🦇",
+        year: "Dec 2023",
+        title: "Batman Award",
+        org: "Arcadia",
+        desc: "Received as best performer of the quarter for outstanding engineering performance.",
+        link: "",
+        images: [
+          {
+            src: "assets/images/awards/award_1_batman_award_arcadia_2023.JPG",
+            caption: "Batman Award — best performer, Arcadia 2023",
+          },
+        ],
+      },
+      {
         icon: "💡",
         year: "2023",
         title: "Technical Innovation Award",
         org: "Arcadia Hackathon",
         desc: "Recognized for the AI Annual Usage project, which predicted annual usage estimates for users.",
         link: "",
+        images: [
+          {
+            src: "assets/images/awards/award_2_technical_project_award_arcadia_2023.png",
+            caption: "Technical Innovation Award — Arcadia Hackathon 2023",
+          },
+        ],
       },
       {
         icon: "🌍",
@@ -275,26 +301,35 @@
         org: "Arcadia Hackathon",
         desc: "Recognized for the Attrition Predictor project, which identified user attrition probability.",
         link: "",
-      },
-      {
-        icon: "🦇",
-        year: "Dec 2023",
-        title: "Batman Award",
-        org: "Arcadia",
-        desc: "Received as best performer of the quarter for outstanding engineering performance.",
-        link: "",
+        images: [
+          {
+            src: "assets/images/awards/award_2_technical_project_award_arcadia_2023.png",
+            caption: "Technical Innovation Award — Arcadia Hackathon 2023",
+          },
+        ],
       },
       {
         icon: "🩺",
-        year: "TBD",
+        year: "2019",
         title: "NHM Recognition",
         org: "National Health Mission",
         desc: "Recognized for digitalizing the Hemophilia Treatment Centers map for National Health Mission magazine.",
         link: "",
+        images: [
+          {
+            src: "assets/images/awards/award_3_NHM_Letter_Mehul.png",
+            caption: "NHM Recognition — Digitalize HTC Map",
+          },
+        ],
       },
     ],
 
     // ── volunteering ─────────────────────────────────────────
+    // Each org is one entry. An entry MAY carry an `events` array
+    // (org → event → media). Media items default to images; add
+    // `type: "video"` (+ optional `poster`) for a clip. The Gallery
+    // section groups these by org → event; the item's photo badge
+    // opens a carousel of ALL that org's media.
     volunteering: [
       {
         role: "RDI Youth Leadership Program",
@@ -304,12 +339,28 @@
         bullets: [
           "Advocating for the rights of people with rare diseases and improved access to treatment around the world.",
         ],
-        // `images` (optional): each { src, caption }. A photo badge appears on
-        // the item and the Gallery section; clicking opens a carousel.
-        images: [
+        events: [
           {
-            src: "assets/images/image_3_geneva.jpg",
-            caption: "Rare Diseases International — Geneva",
+            name: "Geneva 2025",
+            date: "May 2025",
+            media: [
+              {
+                src: "assets/images/volunteering/RareDiseasesInternational/Geneva2025/rarediseases_geneva_chair_photo.JPG",
+                caption: "Geneva 2025 — chairing a session",
+              },
+              {
+                src: "assets/images/volunteering/RareDiseasesInternational/Geneva2025/rarediseases_geneva_group_photo.JPG",
+                caption: "Geneva 2025 — group photo",
+              },
+              {
+                src: "assets/images/volunteering/RareDiseasesInternational/Geneva2025/rarediseases_geneva_who_photo.JPG",
+                caption: "Geneva 2025 — at the WHO",
+              },
+              {
+                src: "assets/images/volunteering/RareDiseasesInternational/Geneva2025/rarediseases_geneva_selfie.jpg",
+                caption: "Geneva 2025 — selfie",
+              },
+            ],
           },
         ],
       },
@@ -319,7 +370,26 @@
         date: "Oct 2024",
         location: "Berlin",
         bullets: [
-          "Represented hemophilia advocacy at the World Health Summit 2025.",
+          "Represented hemophilia advocacy at the World Health Summit 2024.",
+        ],
+        events: [
+          {
+            name: "World Health Summit 2024",
+            date: "Oct 2024",
+            media: [
+              {
+                src: "assets/images/volunteering/IGH/WorldHealthSummit2024/WHS Conference.jpeg",
+                caption: "World Health Summit 2024 — Berlin",
+              },
+              {
+                type: "video",
+                src: "assets/images/volunteering/IGH/WorldHealthSummit2024/whs_conference_video.mp4",
+                poster:
+                  "assets/images/volunteering/IGH/WorldHealthSummit2024/WHS Conference.jpeg",
+                caption: "World Health Summit 2024 — conference",
+              },
+            ],
+          },
         ],
       },
       {
@@ -330,22 +400,38 @@
         bullets: [
           "Led camps focused on advocacy, training, awareness, and fundraising for the hemophilia community.",
         ],
-        images: [
+        events: [
           {
-            src: "assets/images/volunteering/hemophilia/volunteering_1_hfi_mumbai.jpeg",
-            caption: "HFI camp — Mumbai",
+            name: "Youth Camps",
+            media: [
+              {
+                src: "assets/images/volunteering/HemophiliaFederationIndia/YouthCamps/volunteering_1_hfi_mumbai.jpeg",
+                caption: "HFI camp — Mumbai",
+              },
+              {
+                src: "assets/images/volunteering/HemophiliaFederationIndia/YouthCamps/volunteering_2_hfi_bengaluru.jpeg",
+                caption: "HFI camp — Bengaluru",
+              },
+              {
+                src: "assets/images/volunteering/HemophiliaFederationIndia/YouthCamps/volunteering_3_hfi_suro.png",
+                caption: "HFI camp — Delhi",
+              },
+              {
+                src: "assets/images/volunteering/HemophiliaFederationIndia/YouthCamps/volunteering_4_hfi_calicut.png",
+                caption: "HFI camp — Calicut",
+              },
+            ],
           },
           {
-            src: "assets/images/volunteering/hemophilia/volunteering_2_hfi_bengaluru.jpeg",
-            caption: "HFI camp — Bengaluru",
-          },
-          {
-            src: "assets/images/volunteering/hemophilia/volunteering_3_hfi_suro.png",
-            caption: "HFI camp — Delhi",
-          },
-          {
-            src: "assets/images/volunteering/hemophilia/volunteering_4_hfi_calicut.png",
-            caption: "HFI camp — Calicut",
+            name: "WFH Congress — Malaysia 2026",
+            date: "2026",
+            media: [
+              {
+                src: "assets/images/volunteering/HemophiliaFederationIndia/WorldFederationOfHemophilia/Malaysia2026/Malaysia_Group_photo_2026.JPG",
+                caption:
+                  "World Federation of Hemophilia Congress — Malaysia 2026",
+              },
+            ],
           },
         ],
       },

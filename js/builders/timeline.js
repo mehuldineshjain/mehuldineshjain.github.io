@@ -12,10 +12,11 @@
   const ICONS = PB.ICONS;
 
   // a timeline entry (Experience / Education / Volunteering detail).
-  // `carouselKey` (optional): when the entry has `images`, renders a photo
-  // badge that opens the carousel for that key.
+  // `carouselKey` (optional): when the entry has media (`events` or `images`),
+  // renders a photo badge that opens the carousel for that key.
   function timelineItem(entry, dotClass, carouselKey) {
-    const hasPhotos = carouselKey && entry.images && entry.images.length;
+    const mediaCount = PB.mediaCount ? PB.mediaCount(entry) : (entry.images ? entry.images.length : 0);
+    const hasPhotos = carouselKey && mediaCount > 0;
     return el("div", { class: "timeline-item visible" }, [
       el("div", { class: "timeline-marker neu-raised" }, [
         el("span", { class: "timeline-dot " + (dotClass || "") }),
@@ -48,7 +49,7 @@
               entry.tags.map((t) => el("span", { class: "mini-tag", text: t })),
             )
           : null,
-        hasPhotos ? PB.photoBadge(carouselKey, entry.images.length) : null,
+        hasPhotos ? PB.photoBadge(carouselKey, mediaCount) : null,
       ]),
     ]);
   }
