@@ -304,6 +304,14 @@
         bullets: [
           "Advocating for the rights of people with rare diseases and improved access to treatment around the world.",
         ],
+        // `images` (optional): each { src, caption }. A photo badge appears on
+        // the item and the Gallery section; clicking opens a carousel.
+        images: [
+          {
+            src: "assets/images/image_3_geneva.jpg",
+            caption: "Rare Disease International — Geneva",
+          },
+        ],
       },
       {
         role: "Member",
@@ -322,35 +330,32 @@
         bullets: [
           "Led camps focused on advocacy, training, awareness, and fundraising for the hemophilia community.",
         ],
+        images: [
+          {
+            src: "assets/images/volunteering/hemophilia/volunteering_1_hfi_mumbai.jpeg",
+            caption: "HFI camp — Mumbai",
+          },
+          {
+            src: "assets/images/volunteering/hemophilia/volunteering_2_hfi_bengaluru.jpeg",
+            caption: "HFI camp — Bengaluru",
+          },
+          {
+            src: "assets/images/volunteering/hemophilia/volunteering_3_hfi_suro.png",
+            caption: "HFI camp — SURO",
+          },
+          {
+            src: "assets/images/volunteering/hemophilia/volunteering_4_hfi_calicut.png",
+            caption: "HFI camp — Calicut",
+          },
+        ],
       },
     ],
 
     // ── gallery ──────────────────────────────────────────────
-    // Scaffold: drop real images into assets/images/gallery/ and set `img`.
-    // While `img` is empty a placeholder tile shows. `section` (optional) is
-    // a section id the tile links to (click jumps the deck there).
-    gallery: [
-      {
-        img: "",
-        caption: "Rare Disease International — Geneva",
-        section: "volunteering",
-      },
-      {
-        img: "",
-        caption: "World Health Summit 2025 — Berlin",
-        section: "volunteering",
-      },
-      {
-        img: "",
-        caption: "Arcadia Hackathon awards",
-        section: "awards",
-      },
-      {
-        img: "",
-        caption: "Hemophilia Federation India camps",
-        section: "volunteering",
-      },
-    ],
+    // The Gallery section is DERIVED from item photos (no standalone list).
+    // Add an `images: [{ src, caption }]` array to any project, volunteering,
+    // or award entry above and it appears — categorized — in the Gallery
+    // section and gets a photo badge that opens a carousel.
   };
 
   global.PORTFOLIO_DATA = data;

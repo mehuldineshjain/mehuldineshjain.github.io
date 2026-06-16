@@ -31,8 +31,8 @@
       </div>
 
       <div class="nav-actions">
-        <button class="theme-toggle neu-flat" id="themeToggle" type="button"
-          aria-label="Switch theme" aria-pressed="false">☾</button>
+        <button class="theme-toggle neu-flat" id="themeToggle" type="button" aria-label="Switch theme"
+          aria-pressed="false">☾</button>
 
         <!-- HAMBURGER — EXPERIMENTAL. Uncomment to test the mobile menu.
              Paired JS lives in js/main.js (guarded, no-op while commented).
@@ -63,13 +63,13 @@
     <div class="deck-dots" id="deckDots" aria-hidden="true"></div>
 
     <!-- subtle swipe / keyboard hint -->
-    <div class="swipe-hint" id="swipeHint" aria-hidden="true">
+    <!-- <div class="swipe-hint" id="swipeHint" aria-hidden="true">
       <span class="hint-arrow">‹</span>
       <span class="hint-text">
         <span class="hint-touch">Swipe ↔, ↕ for detail</span><span class="hint-keys">← → sections · ↑ ↓ detail</span>
       </span>
       <span class="hint-arrow">›</span>
-    </div>
+    </div> -->
   </main>
 
   <!-- FOOTER -->
@@ -79,6 +79,13 @@
 
   <!-- single source of truth -->
   <script src="js/data.js"></script>
+  <!-- builders (PB namespace): load before registry.js -->
+  <script src="js/core/dom.js"></script>
+  <script src="js/core/icons.js"></script>
+  <script src="js/builders/cards.js"></script>
+  <script src="js/builders/timeline.js"></script>
+  <script src="js/builders/gallery.js"></script>
+  <script src="js/sections/sections.js"></script>
   <!-- card registry: order + builders -->
   <script src="js/registry.js"></script>
   <!-- theme toggle -->

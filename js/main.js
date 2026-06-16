@@ -14,7 +14,11 @@
 
   const data = window.PORTFOLIO_DATA;
   const registry = window.PORTFOLIO_REGISTRY;
+  const PB = window.PB || {};
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // build the carousel key→images lookup once (used by [data-carousel] clicks)
+  if (PB.indexCarousels) PB.indexCarousels(data);
 
   // ── footer year ────────────────────────────────────────────
   const yearEl = document.getElementById('year');
@@ -109,11 +113,24 @@
     }
   });
 
-  // ── in-card actions: "Explore" CTA + gallery tile jumps ──
+  // ── in-card actions: CTAs + section jumps + photo carousel ──
   stage.addEventListener('click', (e) => {
+    // photo badge / gallery tile -> open the carousel
+    const carousel = e.target.closest('[data-carousel]');
+    if (carousel && PB.openCarousel) {
+      e.preventDefault();
+      const key = carousel.getAttribute('data-carousel');
+      const imgs = (PB.carousels || {})[key];
+      if (imgs) PB.openCarousel(imgs, 0);
+      return;
+    }
+    // gallery category tab -> switch panel
+    const tab = e.target.closest('[data-tab]');
+    if (tab && PB.switchGalleryTab) { e.preventDefault(); PB.switchGalleryTab(tab); return; }
+    // "Get in Touch" / cover affordance -> drop to the detail card below
     const trigger = e.target.closest('[data-action="down"]');
     if (trigger) { e.preventDefault(); deck.down(); return; }
-    // gallery tile -> jump to its linked section
+    // "Explore My Work" -> jump to its linked section
     const goto = e.target.closest('[data-goto]');
     if (goto) {
       e.preventDefault();
