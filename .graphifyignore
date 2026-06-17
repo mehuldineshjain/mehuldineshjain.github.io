@@ -1,0 +1,39 @@
+# Reuse git rules
+
+node_modules/
+dist/
+build/
+out/
+coverage/
+
+# Large lockfiles (unnecessary for code logic maps)
+
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+
+# Minified files and maps
+
+_.min.js
+_.min.css
+\*.map
+
+# System, logs, and environments
+
+.DS_Store
+_.log
+.env_
+
+# Prevent Graphify from scanning its own output
+
+graphify-out/
+
+# Media assets (Optional: ignore if they do not contain documentation)
+
+_.png
+_.jpg
+_.jpeg
+_.svg
+_.gif
+_.mp4

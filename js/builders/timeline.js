@@ -30,13 +30,22 @@
           el("div", {}, [
             el("h3", { class: "timeline-role", text: entry.role }),
             entry.link
-              ? el("a", {
-                  href: entry.link,
-                  class: "timeline-org",
-                  target: "_blank",
-                  rel: "noopener",
-                  text: entry.org,
-                })
+              ? el(
+                  "a",
+                  {
+                    href: entry.link,
+                    class: "timeline-org",
+                    target: "_blank",
+                    rel: "noopener",
+                  },
+                  [
+                    el("span", { text: entry.org }),
+                    el("span", {
+                      class: "org-link-icon",
+                      html: ICONS.externalLink,
+                    }),
+                  ],
+                )
               : el("p", { class: "timeline-org", text: entry.org }),
           ]),
           el("span", { class: "timeline-date neu-inset", text: entry.date }),

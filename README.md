@@ -6,7 +6,6 @@
 **[Live Demo →](https://mehuldineshjain.github.io)**
 
 ![Portfolio preview](assets/images/preview.png)
-<!-- Replace with a screenshot or screen-recording GIF of the card deck in action -->
 
 ---
 
@@ -14,13 +13,15 @@
 
 - **2D card deck** — swipe left/right between sections; swipe up/down for detail within each section
 - **3D stack animation** — leaving card recedes behind, incoming card rises into frame
+- **Media gallery** — lightbox carousel for photos **and video**, with a dedicated tabbed Gallery section (Projects / Volunteering / Awards)
+- **Photo badges** — a `📷 n` trigger on any item opens its carousel inline
 - **Neumorphic design** — soft paired light/dark shadows on one base colour
 - **Dark / light theme** — toggle in the nav; respects OS preference, persists to `localStorage`
 - **Cyclical sections** — swipe past the last section and loop back to the first
 - **Smart vertical scroll** — detail cards scroll internally; swipe up/down only changes cards at the scroll boundary
 - **Keyboard & trackpad** — full navigation without touch (see Controls)
-- **Accessible** — ARIA carousel semantics, `prefers-reduced-motion` (crossfade, no drag)
-- **Zero dependencies** — one HTML file, one CSS file, five JS files; serve and done
+- **Accessible** — skip link, ARIA carousel semantics, focus-trapped lightbox, `prefers-reduced-motion` (crossfade, no drag)
+- **Zero dependencies** — one HTML file, one CSS file, a handful of small JS modules; serve and done
 
 ---
 
@@ -38,18 +39,24 @@
 | **Side arrows** (desktop) | Previous / next section |
 | **Progress dots** | Jump to any section |
 | **Nav prev / next labels** | Clickable section jump |
+| **Lightbox** `←` `→` `Esc` | Step carousel media · close |
 
 ---
 
 ## Sections
 
+Eight sections, in deck order:
+
 | Section | Cover | Swipe down for… |
 |---------|-------|-----------------|
-| Home | Avatar, name, animated role, tagline, CTAs | About (bio + social) → Skills |
-| Experience | Role count | Full timeline |
-| Education | Entry count | Full timeline |
-| Awards | Award count | Full grid |
-| Volunteering | Role count | Full timeline |
+| Home | Avatar, name, animated role, tagline, CTAs | About (bio + socials) → Skills |
+| Experience | Role count | Timeline of roles |
+| Projects | Project count | Project cards + media |
+| Certifications | Cert count | Certification list |
+| Education | Entry count | Education timeline |
+| Awards | Award count | Award grid + media |
+| Volunteering | Role count | Timeline + per-event photo/video galleries |
+| Gallery | Moment count | Tabbed photo/video carousel across all media |
 
 Sections are **cyclical** — horizontal wraps around. Vertical is bounded (rubber-bands at top/bottom).
 
@@ -61,7 +68,7 @@ Sections are **cyclical** — horizontal wraps around. Vertical is bounded (rubb
 |-------|--------|
 | Markup | HTML5 — semantic, no templating engine |
 | Styles | CSS3 — custom properties, `@keyframes`, `transform: preserve-3d` |
-| Logic | Vanilla JS (ES5-compatible, no transpiler) |
+| Logic | Vanilla JS (ES5-compatible, no transpiler), modules namespaced under `PB` |
 | Fonts | [DM Sans](https://fonts.google.com/specimen/DM+Sans) + [DM Mono](https://fonts.google.com/specimen/DM+Mono) via Google Fonts |
 | Hosting | GitHub Pages (static, no server needed) |
 
@@ -85,27 +92,53 @@ Or: right-click `index.html` in VS Code → **Open with Live Server**.
 
 ```
 mehul-portfolio/
-├── index.html          # Shell: nav, deck stage, dots, hint, footer
+├── index.html              # Shell: nav, deck stage, dots, footer; loads scripts in order
 ├── css/
-│   └── style.css       # Neumorphic tokens, dark theme, deck/cover/detail layout
+│   └── style.css           # Neumorphic tokens, dark theme, deck/cover/detail layout
 ├── js/
-│   ├── data.js         # All copy lives here — edit to personalise
-│   ├── registry.js     # Section order, labels, and card builders
-│   ├── deck.js         # 2D swipe engine (drag / wheel / ARIA / cues)
-│   ├── theme.js        # Dark/light toggle
-│   └── main.js         # Bootstrap: wires all pieces together
-└── assets/images/
+│   ├── data.js             # SINGLE SOURCE OF TRUTH — all copy (window.PORTFOLIO_DATA)
+│   ├── registry.js         # Section order + which builder renders each card
+│   ├── deck.js             # 2D/3D swipe engine (drag / wheel / keys / ARIA / cues)
+│   ├── theme.js            # Dark / light toggle (OS preference + localStorage)
+│   ├── main.js             # Bootstrap: wires deck, nav title, dots, footer year
+│   ├── core/
+│   │   ├── dom.js          # el() DOM helper (PB namespace)
+│   │   └── icons.js        # inline SVG icon set
+│   ├── builders/
+│   │   ├── cards.js        # generic cover / count / heading primitives
+│   │   ├── timeline.js     # timeline + project / cert item builders
+│   │   └── gallery.js      # photo/video lightbox carousel + Gallery section
+│   └── sections/
+│       └── sections.js     # per-section covers & details (hero, about, skills, …)
+└── assets/
+    ├── favicon.svg
+    ├── images/             # avatars, award & volunteering photos/video
+    ├── resume/resume.pdf
+    └── certificates/claude_code_101.pdf
 ```
 
-**Data flow:** `data.js` → `registry.js` → `deck.js` renders the grid; `main.js` builds the nav title and dots from the same registry so labels never drift.
+**Builders namespace:** every card builder hangs off a shared global `PB` object so the no-build `<script>` setup can split logic across files. `core/` and `builders/` and `sections/` populate `PB`; `registry.js` references those builders by name.
+
+**Script load order matters** (set in `index.html`):
+`data.js` → `core/*` → `builders/*` → `sections/sections.js` → `registry.js` → `theme.js` → `deck.js` → `main.js`.
+`PB` must be fully populated before `registry.js` reads from it.
+
+**Data flow:** `data.js` (`PORTFOLIO_DATA`) → builders construct DOM → `registry.js` maps each section to its builders → `deck.js` renders the grid; `main.js` builds the nav title and dots from the **same** registry, so labels never drift.
 
 ---
 
 ## Personalise (fork this)
 
-1. **Content** — edit `js/data.js`. All text (name, bio, roles, experience, skills…) lives here. Nothing is hard-coded in markup.
-2. **Colours** — edit the `:root` / `[data-theme="dark"]` token block in `css/style.css`.
-3. **Add a section** — add a key to `js/data.js`, then add an entry to the `registry` array in `js/registry.js`. The deck, nav, and dots update automatically.
+1. **Content** — edit `js/data.js`. All text (name, bio, roles, experience, projects, skills, awards, volunteering…) lives here. Nothing is hard-coded in markup.
+2. **Media** — drop images/clips under `assets/images/` and reference them from `data.js`. Items take either a flat `images: [{ src, caption }]` list or nested `events: [{ name, date, media: [...] }]`; add `type: "video"` (+ optional `poster`) to a media entry for a clip.
+3. **Colours** — edit the `:root` / `[data-theme="dark"]` token block in `css/style.css`.
+4. **Add a section** — add a key to `js/data.js`, write a builder (or reuse one) in `js/sections/sections.js`, then add an entry to the `registry` array in `js/registry.js`. The deck, nav, and dots update automatically.
+
+---
+
+## Migration note (vanilla → React)
+
+The architecture is deliberately framework-agnostic. `data.js` is a plain object reusable as-is, and `registry.js` keeps a stable section/card shape — to port, replace each builder's `build(data)` with a component; the deck maps over sections/cards identically.
 
 ---
 
@@ -126,7 +159,6 @@ For a project repo (not a user page): go to **Settings → Pages** and set sourc
 ## License
 
 MIT — feel free to fork, adapt, and build your own version.
-See [LICENSE](LICENSE) for the full text.
 
 ---
 

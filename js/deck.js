@@ -13,7 +13,8 @@
    Behaviour:
      - 3D stack: the leaving card recedes behind the deck; the
        incoming card rises from behind into frame (both axes).
-     - pointer drag, axis-locked (commit ~80px OR ~400px/s).
+     - pointer drag (touch / pen only — mouse is ignored on desktop),
+       axis-locked (commit ~80px OR ~400px/s).
        Horizontal moves sections (resets to the cover). Vertical
        moves cards; if the front card can scroll in that direction
        it scrolls natively instead of navigating.
@@ -258,6 +259,10 @@
 
       const onDown = (e) => {
         if (e.target.closest('a, button')) return;
+        // desktop: a mouse should not drag the whole card — it confuses
+        // (use arrows / dots / keys / wheel + the count & ↓/↑ buttons).
+        // touch + pen still swipe, so touchscreen laptops are unaffected.
+        if (e.pointerType === 'mouse') return;
         dragging = true; axis = null;
         startX = lastX = e.clientX;
         startY = lastY = e.clientY;

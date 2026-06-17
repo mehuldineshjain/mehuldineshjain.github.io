@@ -334,6 +334,7 @@
       {
         role: "RDI Youth Leadership Program",
         org: "Rare Diseases International",
+        link: "https://www.rarediseasesinternational.org/",
         date: "May 2025",
         location: "Geneva",
         bullets: [
@@ -366,7 +367,8 @@
       },
       {
         role: "Youth Member",
-        org: "Interessengemeinschaft Hämophiler eV (IGH)",
+        org: "InteressenGemeinschaft Hämophiler eV (IGH)",
+        link: "https://www.igh.info/",
         date: "Oct 2024",
         location: "Berlin",
         bullets: [
@@ -395,6 +397,7 @@
       {
         role: "HFI Youth Leader — South Zone Representative",
         org: "Hemophilia Federation India",
+        link: "https://hemophilia.in/",
         date: "Feb 2020",
         location: "India",
         bullets: [

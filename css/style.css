@@ -884,6 +884,15 @@ ul { list-style: none; }
 }
 
 /* ── CARD FRAME ────────────────────────────────────────────── */
+/* desktop: the card body is NOT clickable — only the count pill, ↓/↑
+   cues, links and badges are. Pin the surface to the default arrow so
+   the empty card never reads as "clickable, but nothing happens". */
+.deck-card,
+.card-cover,
+.cover-inner,
+.card-body,
+.card-scroll { cursor: default; }
+
 .deck-card {
   position: absolute;
   top: 50%;
@@ -1021,14 +1030,15 @@ ul { list-style: none; }
 .cover-count {
   font-family: var(--font-mono);
   font-size: 0.95rem;
-  color: var(--text-2);
+  color: var(--accent);
   padding: 6px 18px;
   border-radius: 999px;
-  box-shadow: var(--neu-inner);
+  box-shadow: var(--neu-flat);
   cursor: pointer;
-  transition: color var(--transition), box-shadow var(--transition);
+  transition: all var(--transition);
 }
-.cover-count:hover { color: var(--accent); }
+/* resting = raised accent pill; hover presses IN like the hero CTA buttons */
+.cover-count:hover { box-shadow: var(--neu-inner); color: var(--accent-2); }
 .cover-count:active { box-shadow: var(--neu-pressed); }
 .cover-count:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .cover-hint {
