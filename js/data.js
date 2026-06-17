@@ -243,6 +243,15 @@
     // ── certifications ───────────────────────────────────────
     certifications: [
       {
+        title: "Claude Code 101",
+        org: "Anthropic Academy",
+        year: "2026",
+        desc: "AI-assisted workflows,agentic loop, context window, tools, and permissions.",
+        link: "https://verify.skilljar.com/c/itty2fhtrxq7",
+        tags: ["Claude", "AI", "Agents", "Workflow"],
+        icon: "claude",
+      },
+      {
         title: "Meta Full Stack Developer: Front-End & Back-End from Scratch",
         org: "Coursera by Meta",
         year: "2025",
@@ -251,14 +260,15 @@
         tags: ["React", "Django", "APIs", "Full Stack"],
         icon: "meta",
       },
+
       {
-        title: "Claude Code 101",
-        org: "Anthropic Academy",
-        year: "2026",
-        desc: "AI-assisted workflows,agentic loop, context window, tools, and permissions.",
-        link: "https://verify.skilljar.com/c/itty2fhtrxq7",
-        tags: ["Claude", "AI", "Agents", "Workflow"],
-        icon: "claude",
+        title: "Python for Data Science, AI & Development",
+        org: "Coursera IBM",
+        year: "2020",
+        desc: "Python programming, Pandas, NumPy, web scraping.",
+        link: "https://www.coursera.org/account/accomplishments/verify/Y26TL38G8RY3",
+        tags: ["AI", "Data Science", "Python"],
+        icon: "python",
       },
     ],
 
